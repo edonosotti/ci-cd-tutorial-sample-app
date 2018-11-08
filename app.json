@@ -1,0 +1,17 @@
+{
+  "name": "CD/CI Tutorial Sample Application by RockedScience.net",
+  "description": "A sample Python REST API application based on Flask, with database migrations and unit tests.",
+  "image": "heroku/python",
+  "repository": "",
+  "keywords": ["python" ],
+  "addons": [ "heroku-postgresql" ],
+  "env": {},
+  "environments": {
+    "test": {
+      "scripts": {
+        "test-setup": "flask db upgrade && python seed.py",
+        "test": "python -m unittest discover"
+      }
+    }
+  }
+}
