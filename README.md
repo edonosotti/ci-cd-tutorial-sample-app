@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/rockedscience/ci-cd-tutorial-sample-app.svg?branch=master)](https://travis-ci.org/rockedscience/ci-cd-tutorial-sample-app)
+
 # CD/CI Tutorial Sample Application
 
 ## Description
