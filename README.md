@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/rockedscience/ci-cd-tutorial-sample-app.svg?branch=master)](https://travis-ci.org/rockedscience/ci-cd-tutorial-sample-app)
+[![Build Status](https://travis-ci.org/edonosotti/ci-cd-tutorial-sample-app.svg?branch=master)](https://travis-ci.org/edonosotti/ci-cd-tutorial-sample-app)
+[![codebeat badge](https://codebeat.co/badges/0e006c74-a2f9-4f34-9cf4-2378fb7d995a)](https://codebeat.co/projects/github-com-edonosotti-ci-cd-tutorial-sample-app-master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/e14a2647843de209fd5e/maintainability)](https://codeclimate.com/github/edonosotti/ci-cd-tutorial-sample-app/maintainability)
 
 # CD/CI Tutorial Sample Application
 
