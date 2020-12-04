@@ -16,18 +16,33 @@ It demonstrates how to:
 
 ## Requirements
 
- * `Python 3.6`
- * `pip`
- * `virtualenv`
+ * `Python 3.8`
+ * `Pip`
+ * `virtualenv`, or `conda`, or `miniconda`
+
+The `psycopg2` package does require `libpq-dev` and `gcc`.
+To install them (with `apt`), run:
+
+```sh
+$ sudo apt-get install libpq-dev gcc
+```
 
 ## Installation
 
-Run:
+With `virtualenv`:
 
 ```sh
-$ pip install -r requirements.txt
 $ python -m venv venv
 $ source venv/bin/activate
+$ pip install -r requirements.txt
+```
+
+With `conda` or `miniconda`:
+
+```sh
+$ conda env create -n ci-cd-tutorial-sample-app python=3.8
+$ source activate ci-cd-tutorial-sample-app
+$ pip install -r requirements.txt
 ```
 
 Optional: set the `DATABASE_URL` environment variable to a valid SQLAlchemy connection string. Otherwise, a local SQLite database will be created.
