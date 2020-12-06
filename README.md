@@ -77,7 +77,14 @@ $ flask run
 Run the application using `gunicorn`:
 
 ```sh
+$ pip install -r requirements-server.txt
 $ gunicorn app:app
+```
+
+To set the listening address and port, run:
+
+```
+$ gunicorn app:app -b 0.0.0.0:8000
 ```
 
 ## Deploying to Heroku
