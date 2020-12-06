@@ -87,6 +87,15 @@ To set the listening address and port, run:
 $ gunicorn app:app -b 0.0.0.0:8000
 ```
 
+## Running on Docker
+
+Run:
+
+```
+$ docker build -t ci-cd-tutorial-sample-app:latest .
+$ docker run -d -p 8000:8000 ci-cd-tutorial-sample-app:latest
+```
+
 ## Deploying to Heroku
 
 Run:
