@@ -3,8 +3,6 @@
 name: Run unit tests with Python
 
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
   push:
     # Match all branches *without* a / in the name.
     # This will exclude "sub" branches, such as "feature branches",
