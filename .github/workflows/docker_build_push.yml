@@ -6,7 +6,7 @@ name: Build and push Docker image upon release
 on:
   # Build and push Docker images *only* for releases.
   release:
-    types: [published, created, edited]
+    types: [published] # , created, edited
 
 jobs:
   # Run code tests before building the image, to ensure it is good to go
