@@ -21,7 +21,7 @@ on:
     branches:
       - '**'
   release:
-    types: [published, created, edited]
+    types: [published, edited]
 
 jobs:
   # Run code tests before building the image, to ensure it is good to go
@@ -60,7 +60,7 @@ jobs:
   push_to_registry:
     name: Build and push Docker image to Docker Hub
     # ...but only when a `release` is `published`
-    if: github.event_name == 'release' && github.event.action == 'published'
+    if: github.event_name == 'release' # && github.event.action == 'published'
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
