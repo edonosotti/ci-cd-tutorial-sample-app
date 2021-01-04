@@ -14,6 +14,12 @@ It demonstrates how to:
  * Basic database operations and migrations using the Flask wrappers around [Alembic](https://bitbucket.org/zzzeek/alembic) and [SQLAlchemy](https://www.sqlalchemy.org)
  * Write automated unit tests with [unittest](https://docs.python.org/2/library/unittest.html)
 
+Also:
+
+ * How to use [GitHub Actions](https://github.com/features/actions)
+
+Related article: https://medium.com/rockedscience/docker-ci-cd-pipeline-with-github-actions-6d4cd1731030
+
 ## Requirements
 
  * `Python 3.8`
