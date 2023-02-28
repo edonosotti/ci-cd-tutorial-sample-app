@@ -6,6 +6,8 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - setup_remote_docker:
+          version: 20.10.14
       - checkout
       - docker/build:
           image: rhnylyukh/ci-cd-tutorial-sample-app 
