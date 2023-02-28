@@ -7,8 +7,9 @@ jobs:
       # replace with your preferred image
       - image: cimg/base:stable
     steps:
+      - checkout
       - docker/build:
-          image: rhnylyukh/ci-cd-tutorial-sample-app  
+          image: rhnylyukh/ci-cd-tutorial-sample-app 
 workflows:
   build-and-publish-docker-image:
     jobs:
@@ -19,3 +20,5 @@ workflows:
           docker-password: DOCKER_PASSWORD 
           docker-username: DOCKER_LOGIN 
           update-description: true 
+          requires:
+            - docker-build
