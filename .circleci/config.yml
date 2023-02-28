@@ -15,11 +15,11 @@ workflows:
   build-and-publish-docker-image:
     jobs:
       - docker-build
-      # - docker/publish:
-      #     image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME 
-      #     deploy: true 
-      #     docker-password: DOCKER_PASSWORD 
-      #     docker-username: DOCKER_LOGIN 
-      #     update-description: true 
-      #     requires:
-      #       - docker-build
+      - docker/publish:
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME 
+          deploy: true 
+          docker-password: DOCKER_PASSWORD 
+          docker-username: DOCKER_LOGIN 
+          update-description: true 
+          requires:
+            - docker-build
