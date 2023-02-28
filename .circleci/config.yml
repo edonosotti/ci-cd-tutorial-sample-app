@@ -1,0 +1,12 @@
+version: '2.1'
+orbs:
+  docker: circleci/docker@1.7.0
+workflows:
+  build-and-publish-docker-image:
+    jobs:
+      - docker/publish:
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME 
+          deploy: true 
+          docker-password: DOCKER_PASSWORD 
+          docker-username: DOCKER_LOGIN 
+          update-description: true 
