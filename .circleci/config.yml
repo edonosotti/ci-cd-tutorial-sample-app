@@ -1,12 +1,25 @@
 version: '2.1'
 orbs:
-  docker: circleci/docker@1.7.0
+  docker: circleci/docker@2.2.0
+jobs:
+  docker-build:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - setup_remote_docker:
+          version: 20.10.14
+      - checkout
+      - docker/build:
+          image: rhnylyukh/ci-cd-tutorial-sample-app 
 workflows:
   build-and-publish-docker-image:
     jobs:
+      - docker-build
       - docker/publish:
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME 
           deploy: true 
           docker-password: DOCKER_PASSWORD 
           docker-username: DOCKER_LOGIN 
           update-description: true 
+          requires:
+            - docker-build
