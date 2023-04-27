@@ -10,11 +10,11 @@ pipeline {
             steps {
                 sh 'ls -la'
             }
-            post {
+           /* post {
                 success {
                     build job: 'your-build-job'
                 }
-            }
+            }*/
         }
         stage('Build Docker image') {
             steps {
