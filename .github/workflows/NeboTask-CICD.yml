@@ -112,7 +112,7 @@ jobs:
       env:
         AWS_REGION: ${{env.AWS_REGION_NAME}}
         ECR_REPOSITORY: "nebo-repo"
-        ECR_REGISTRY: ${{env.AWS_ECR_REPOSITORY}}
+        ECR_REGISTRY: ${{env.AWS_ECR_REGISTRY}}
 
 
       run: |
