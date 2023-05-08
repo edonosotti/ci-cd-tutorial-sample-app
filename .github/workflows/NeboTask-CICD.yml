@@ -89,7 +89,7 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
         AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
-
+#Build image
     - name: Build image and push to ECR registry
       env:
         AWS_REGION: ${{env.AWS_REGION_NAME}}
