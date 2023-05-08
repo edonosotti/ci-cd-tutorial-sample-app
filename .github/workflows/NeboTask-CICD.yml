@@ -86,5 +86,24 @@ jobs:
     - name: Connection to AWS ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+      env:
+        AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
+        AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
+
+    - name: Build image and push to ECR registry
+      env:
+        AWS_REGION: ${{env.AWS_REGION_NAME}}
+        ECR_REPOSITORY: "nebo-repo"
+        ECR_REGISTRY: ${{env.AWS_ECR_REPOSITORY}}
+        IMAGE_TAG: ${{ githab.sha }}
+      run: |
+        export ECR_REGISTRY=${{steps.login-ecr.outputs.registry}}
+        export TAG=latest
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+
+
+
 
 
