@@ -9,9 +9,9 @@ on:
       - 'master'
       - 'stage'
 
-      jobs:
-        job_1:
-          runs-on: ubuntu-latest
-          steps:
-            - name: My first step
-              run: echo This is the first step of my first job.
+jobs:
+  job_1:
+    runs-on: ubuntu-latest
+    steps:
+    - name: My first step
+    run: echo This is the first step of my first job.
