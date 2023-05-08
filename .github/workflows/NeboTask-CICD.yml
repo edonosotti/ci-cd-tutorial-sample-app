@@ -95,12 +95,14 @@ jobs:
         AWS_REGION: ${{env.AWS_REGION_NAME}}
         ECR_REPOSITORY: "nebo-repo"
         ECR_REGISTRY: ${{env.AWS_ECR_REPOSITORY}}
-        IMAGE_TAG: ${{ github.sha }}
+    #    IMAGE_TAG: ${{ github.sha }}
+        IMAGE_TAG: latest
       run: |
         export ECR_REGISTRY=${{steps.login-ecr.outputs.registry}}
-        export TAG=latest
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        echo "Pushing image to ECR..."
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
 
 
