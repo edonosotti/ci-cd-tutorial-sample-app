@@ -1,6 +1,6 @@
 name: MyNebo-CI/CD-Pipeline
 env:
-  AWS_REGION_NAME: "ue-central-1"
+  AWS_REGION_NAME: "eu-central-1"
   DOCKER IMAGE_NAME: "FlaskAPP-"
 
 on:
@@ -76,4 +76,4 @@ jobs:
         aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         aws-region: ${{env.AWS_REGION_NAME}}
     - name: Ds
-      run: aws s3 ls s3://coe-internal-oec-config
+      run: aws s3 ls s3://vpakhai-nebotasks-tf-backend
