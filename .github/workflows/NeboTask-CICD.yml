@@ -15,9 +15,8 @@ on:
     # test everything coming from the outside world, for good measure.
     # The `branches` tag could also be omitted, yielding the same effect here.
     branches:
-      - '**'
-  release:
-    types: [published, edited]
+      - 'stage'
+
 
 jobs:
   # Run code tests before building the image, to ensure it is good to go
