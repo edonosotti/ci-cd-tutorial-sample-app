@@ -66,6 +66,7 @@ jobs:
   building_step:
     name: AWS connections and building img
     runs-on: ubuntu-latest
+    needs: testing_step
 
 
     steps:
@@ -75,5 +76,5 @@ jobs:
         aws-access-key-id: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
         aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         aws-region: ${{env.AWS_REGION_NAME}}
-    - name: Ds
+    - name: Testing connection with s3 ls
       run: aws s3 ls s3://vpakhai-nebotasks-tf-backend
