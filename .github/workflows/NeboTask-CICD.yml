@@ -95,7 +95,7 @@ jobs:
         AWS_REGION: ${{env.AWS_REGION_NAME}}
         ECR_REPOSITORY: "nebo-repo"
         ECR_REGISTRY: ${{env.AWS_ECR_REPOSITORY}}
-        IMAGE_TAG: ${{ githab.sha }}
+        IMAGE_TAG: ${{ github.sha }}
       run: |
         export ECR_REGISTRY=${{steps.login-ecr.outputs.registry}}
         export TAG=latest
