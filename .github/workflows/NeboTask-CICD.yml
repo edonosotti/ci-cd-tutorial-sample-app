@@ -119,6 +119,7 @@ jobs:
           export ECR_REGISTRY=${{steps.login-ecr.outputs.registry}}
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.vars.outputs.sha_short }} .
           echo "Pushing image to ECR..."
+          echo " sha_short is ${{ steps.vars.outputs.sha_short }}"
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.vars.outputs.sha_short }}
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.vars.outputs.sha_short }}"
 
