@@ -4,4 +4,3 @@ Flask-Migrate==2.5.3
 Flask-SQLAlchemy==2.5.0
 SQLAlchemy==1.4.29
 MarkupSafe==1.1.1
-
