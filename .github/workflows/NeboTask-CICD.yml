@@ -97,7 +97,7 @@ jobs:
     - name: Build image and push to ECR registry with latest tag
       env:
         AWS_REGION: ${{env.AWS_REGION_NAME}}
-        ECR_REPOSITORY: ${{env.AWS_ECR_REPOSITORY}}
+        ECR_REPOSITORY: "nebo-repo"
         ECR_REGISTRY: ${{env.AWS_ECR_REGISTRY}}
     #    IMAGE_TAG: ${{ github.sha }}
         IMAGE_TAG: latest
