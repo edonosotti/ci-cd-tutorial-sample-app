@@ -4,4 +4,4 @@ Flask-SQLAlchemy==2.4.4
 jinja2==2.10.2
 MarkupSafe==1.1.1
 Werkzeug==1.0.1
-SQLAlchemy==1.4.27
+SQLAlchemy==1.4.36
