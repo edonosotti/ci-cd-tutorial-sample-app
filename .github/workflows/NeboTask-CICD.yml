@@ -72,8 +72,8 @@ jobs:
     - name: Configure AWS connections
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{MY_PRIVATE_AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
+        aws-access-key-id: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
+        aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         aws-region: ${{env.AWS_REGION_NAME}}
     - name: Ds
       run: aws s3 ls s3://coe-internal-oec-config
