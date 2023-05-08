@@ -9,9 +9,6 @@ on:
       - 'master'
       - 'stage'
 
-  release:
-    types: [published, edited]
-
 jobs:
   # Run code tests before building the image, to ensure it is good to go
   build-push:
@@ -19,5 +16,5 @@ jobs:
     runs-on: ubuntu-latest
 
   steps:
-  - name: Checkout app code
-  - uses: actions/checkout@v2
+    - name: Checkout app code
+    - uses: actions/checkout@v2
