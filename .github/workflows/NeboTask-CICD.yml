@@ -1,4 +1,8 @@
 name: MyNebo-CI/CD-Pipeline
+env:
+  AWS_REGION_NAME: "ue-central-1"
+  DOCKER IMAGE_NAME: "FlaskAPP-"
+
 on:
   push:
     # Match all branches *without* a / in the name.
@@ -56,4 +60,5 @@ jobs:
     - name: Test with unittest
       run: |
         python -m unittest discover
+        echo "Testing finished successfully"
   # Build and push the Docker image
