@@ -27,6 +27,7 @@ jobs:
 
     steps:
 
+    - name: Copy code from git
     - uses: actions/checkout@v2
     - name: Use Node.js
       uses: actions/setup-node@v2
