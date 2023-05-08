@@ -77,4 +77,7 @@ jobs:
         aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         aws-region: ${{env.AWS_REGION_NAME}}
     - name: Testing connection with s3 ls
-      run: aws s3 ls s3://vpakhai-nebotasks-tf-backend
+      run: |
+        aws s3 ls s3://vpakhai-nebotasks-tf-backend
+        echo "Vpakhai test"
+        ls -la
