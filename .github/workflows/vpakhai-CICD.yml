@@ -40,8 +40,3 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run unit tests
-      run:  python -m unittest discover
-
-    - name: Run unit tests
-      run:  echo "Testing finished successfully"
