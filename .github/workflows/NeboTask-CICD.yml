@@ -64,7 +64,7 @@ jobs:
   # Build and push the Docker image
 
   building_step:
-    name: Run code tests
+    name: AWS connections and building img
     runs-on: ubuntu-latest
 
 
