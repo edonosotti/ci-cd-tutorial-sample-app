@@ -23,9 +23,7 @@ jobs:
   build:
     name: Run code tests
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.8] # Using a list so it's extensible for future use
+
 
     steps:
 
