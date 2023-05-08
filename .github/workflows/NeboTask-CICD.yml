@@ -99,7 +99,7 @@ jobs:
       run: |
         export ECR_REGISTRY=${{steps.login-ecr.outputs.registry}}
         export TAG=latest
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
 
