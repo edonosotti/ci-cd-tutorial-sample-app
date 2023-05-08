@@ -77,8 +77,14 @@ jobs:
         aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         aws-region: ${{env.AWS_REGION_NAME}}
     - uses: actions/checkout@v2
+
     - name: Testing connection with s3 ls
       run: |
         aws s3 ls s3://vpakhai-nebotasks-tf-backend
         echo "Vpakhai test"
         ls -la
+    - name: Connection to AWS ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+
