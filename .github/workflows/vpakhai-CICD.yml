@@ -2,16 +2,9 @@ name: MyNebo-CI/CD-Pipeline
 on:
   push:
     branches:
-      - 'master'
-      - 'stage'
+      - master
+      - stage
   pull_request:
     branches:
-      - 'master'
-      - 'stage'
-
-jobs:
-  job_1:
-    runs-on: ubuntu-latest
-    steps:
-    - name: My first step
-    run: echo This is the first step of my first job.
+      - master
+      - stage
