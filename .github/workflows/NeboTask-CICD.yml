@@ -124,13 +124,26 @@ jobs:
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.vars.outputs.sha_short }}"
 
   deploing_stage:
-    name: Deploying to env
+    name: Deploying to stage
     runs-on: ubuntu-latest
     needs: building_step
     if: github.ref == 'refs/heads/stage'
 
     steps:
     - name: Print value from previus job
+      run: echo " STAGE- sha_short is ${{ steps.vars.outputs.sha_short }}"
+
+
+
+
+  deploing_prod:
+    name: Deploying to env
+    runs-on: ubuntu-latest
+    needs: building_step
+    if: github.ref == 'refs/heads/stage'
+
+    steps:
+    - name: Print value from previus job prod
       run: echo "  sha_short is ${{ steps.vars.outputs.sha_short }}"
 
 
