@@ -141,13 +141,21 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         ASG_STAGE: ${{secrets.ASG_STAGE}}
         AWS_REGION: ${{env.AWS_REGION_NAME}}
+        ECR_REGISTRY: ${{env.AWS_ECR_REGISTRY}}
+        IMAGE:
 
       run: |
         echo "Start deploing to ASG-STAGE"
         aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
         aws configure set aws_secret_access_key  $AWS_SECRET_ACCESS_KEY
         aws configure set region $AWS_REGION
-        aws ssm send-command --instance-ids "i-0892f96434e23c99f" --document-name "AWS-RunShellScript" --parameters commands="touch /home/ubuntu/GitAction.txt"
+
+        RUN_COMANDS="aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID &&\
+        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY"
+
+
+
+        aws ssm send-command --instance-ids "i-0a372268d645629b9" --document-name "AWS-RunShellScript" --parameters commands="$RUN_COMANDS"
 
 
 
