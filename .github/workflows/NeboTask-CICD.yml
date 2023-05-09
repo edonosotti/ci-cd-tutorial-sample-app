@@ -79,11 +79,6 @@ jobs:
         aws-region: ${{env.AWS_REGION_NAME}}
     - uses: actions/checkout@v2
 
-    - name: Testing connection with s3 ls
-      run: |
-        aws s3 ls s3://vpakhai-nebotasks-tf-backend
-        echo "Vpakhai test"
-        ls -la
     - name: Connection to AWS ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
@@ -132,6 +127,15 @@ jobs:
     steps:
     - name: Print value from previus job
       run: echo " STAGE- sha_short is ${{ steps.vars.outputs.sha_short }}"
+
+    - name: executing remote ssh commands using ssh key
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: whoami
 
 
 
