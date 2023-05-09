@@ -135,7 +135,9 @@ jobs:
         username: ${{ env.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ env.PORT }}
-        script: whoami
+        script: !
+          whoami
+          ls -al
 
 
 
