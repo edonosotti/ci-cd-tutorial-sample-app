@@ -90,17 +90,16 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
         AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
-#Build image
+
     - name: Set outputs
       id: vars
       run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
+#Build image
     - name: Build image and push to ECR registry with latest tag
       env:
         AWS_REGION: ${{env.AWS_REGION_NAME}}
         ECR_REPOSITORY: "nebo-repo"
         ECR_REGISTRY: ${{env.AWS_ECR_REGISTRY}}
-    #    IMAGE_TAG: ${{ github.sha }}
         IMAGE_TAG: latest
       run: |
         export ECR_REGISTRY=${{steps.login-ecr.outputs.registry}}
