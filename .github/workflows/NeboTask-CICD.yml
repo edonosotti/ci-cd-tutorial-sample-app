@@ -156,6 +156,7 @@ jobs:
 
 
         aws ssm send-command --instance-ids "i-0a372268d645629b9" --document-name "AWS-RunShellScript" --parameters commands="$RUN_COMANDS"
+        aws ssm send-command --instance-ids "i-0a372268d645629b9" --document-name "AWS-RunShellScript" --parameters commands="docker run -d -p 80:80 nginx "
 
 
 
