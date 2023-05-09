@@ -5,21 +5,14 @@ name: Lint the code, run tests, build and push Docker image
 
 on:
   push:
-    # Match all branches *without* a / in the name.
-    # This will exclude "sub" branches, such as "feature branches",
-    # named something like: "feature/my-feature". Those branches will
-    # likely contain "work in progress" code, so we will run the tests
-    # on the local machine and avoid using up GitHub Actions credits
-    # (if applicable, such as in `private` repositories).
-    # Filter syntax info: https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
     branches:
-      - '*'
+      - master
+      - develop
   pull_request:
-    # Since pull requests come from "third parties", we will automatically
-    # test everything coming from the outside world, for good measure.
-    # The `branches` tag could also be omitted, yielding the same effect here.
     branches:
-      - '**'
+      - master
+      - develop
+
   release:
     types: [published, edited]
 
@@ -56,25 +49,35 @@ jobs:
       run: |
         python -m unittest discover
 
+    - name: Set environment based on branch
+      run: |
+        if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+          echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+        else
+          echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+        fi
+
   # Build and push the Docker image
   push_to_registry:
     name: Build and push Docker image to Docker Hub
-    # ...but only when a `release` is `published`
-    if: github.event_name == 'release' # && github.event.action == 'published'
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
-        # if: ${{ github.ref == 'ref/head/master' }} # Info: https://docs.github.com/en/free-pro-team@latest/actions/reference/context-and-expression-syntax-for-github-actions#about-contexts-and-expressions
+
+      - name: Set environment based on branch
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+            echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+          fi
 
       - name: Build and push image to the Docker Hub
-        uses: docker/build-push-action@v1 # Info: https://github.com/docker/build-push-action/tree/releases/v1#tags
-        # if: ${{ github.ref == 'ref/head/master' }}
+        uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           repository: ${{ secrets.DOCKERHUB_REPOSITORY }}
-          tag_with_ref: true # Info: https://github.com/docker/build-push-action/tree/releases/v1#tag_with_ref
-          tag_with_sha: true # Info: https://github.com/docker/build-push-action/tree/releases/v1#tag_with_sha
-          tags: latest
-          # push: ${{ startsWith(github.ref, 'refs/tags/') }}
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ env.ENVIRONMENT }}-${{ github.sha }}
