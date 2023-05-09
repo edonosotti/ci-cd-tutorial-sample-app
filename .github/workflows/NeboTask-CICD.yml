@@ -147,11 +147,8 @@ jobs:
         aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
         aws configure set aws_secret_access_key  $AWS_SECRET_ACCESS_KEY
         aws configure set region $AWS_REGION
+        aws ssm send-command --instance-ids "i-0892f96434e23c99f" --document-name "AWS-RunShellScript" --parameters commands="touch /home/ubuntu/GitAction.txt"
 
-        for ID in $(aws autoscaling describe-auto-scaling-instances --region us-east-1 --query AutoScalingInstances[].InstanceId --output text);
-        do
-          aws ec2 describe-instances --instance-ids $ID --region us-east-1 --query Reservations[].Instances[].PublicIpAddress --output text
-        done
 
 
 
