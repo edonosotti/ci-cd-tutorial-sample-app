@@ -128,16 +128,30 @@ jobs:
     - name: Print value from previus job
       run: echo " STAGE- sha_short is ${{ steps.vars.outputs.sha_short }}"
 
-    - name: executing remote ssh commands using ssh key
-      uses: appleboy/ssh-action@v0.1.10
+    - name: Configure AWS connections
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ env.USERNAME }}
-        password: ${{ secrets.KEY }}
-        port: ${{ env.PORT }}
-        script: |
-          whoami
-          ls -al
+        aws-access-key-id: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
+        aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
+        aws-region: ${{env.AWS_REGION_NAME}}
+
+    - name: Deployng into ASG-STAGE
+      env:
+        AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
+        AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
+        ASG_STAGE: ${{secrets.ASG_STAGE}}
+        AWS_REGION: ${{env.AWS_REGION_NAME}}
+
+      run: |
+        echo "Start deploing to ASG-STAGE"
+        aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+        aws configure set aws_secret_access_key  $AWS_SECRET_ACCESS_KEY
+        aws configure set region $AWS_REGION
+
+        for ID in $(aws autoscaling describe-auto-scaling-instances --region us-east-1 --query AutoScalingInstances[].InstanceId --output text);
+        do
+          aws ec2 describe-instances --instance-ids $ID --region us-east-1 --query Reservations[].Instances[].PublicIpAddress --output text
+        done
 
 
 
