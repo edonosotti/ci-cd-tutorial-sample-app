@@ -131,9 +131,9 @@ jobs:
     - name: executing remote ssh commands using ssh key
       uses: appleboy/ssh-action@v0.1.10
       with:
-        host: 3.127.255.27
+        host: ${{ env.HOST }}
         username: ${{ env.USERNAME }}
-        key: ${{ secrets.KEY }}
+        password: ${{ secrets.KEY }}
         port: ${{ env.PORT }}
         script: |
           whoami
