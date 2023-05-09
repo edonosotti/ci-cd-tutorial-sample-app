@@ -19,8 +19,8 @@ on:
     # test everything coming from the outside world, for good measure.
     # The `branches` tag could also be omitted, yielding the same effect here.
     branches:
-      - 'stage'
       - 'master'
+    types: [closed]
 
 
 jobs:
