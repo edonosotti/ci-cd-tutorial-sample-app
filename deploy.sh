@@ -15,7 +15,7 @@ instance_ids=$(aws autoscaling describe-auto-scaling-instances --profile private
 echo "Instance IDs:"
 echo "$instance_ids"
 
-RUN_COMMANDS= "touch /home/ubuntu/test555.txt"
+RUN_COMMANDS_SSM= "touch /home/ubuntu/test555.txt"
 
 # Execute AWS SSM command on each instance
 IFS=$'\n' read -rd '' -a instance_array <<< "$instance_ids"
@@ -32,5 +32,5 @@ for instance_id in "${instance_array[@]}"; do
         --region $AWS_REGION \
         --instance-ids $instance_id \
         --document-name "AWS-RunShellScript" \
-        --parameters 'commands=$RUN_COMMANDS '
+        --parameters 'commands=$RUN_COMMANDS_SSM '
 done
