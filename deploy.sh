@@ -15,7 +15,7 @@ instance_ids=$(aws autoscaling describe-auto-scaling-instances --profile private
 echo "Instance IDs:"
 echo "$instance_ids"
 
-RUN_COMMANDS = "touch /home/ubuntu/test555.txt"
+RUN_COMMANDS= "touch /home/ubuntu/test555.txt"
 
 # Execute AWS SSM command on each instance
 IFS=$'\n' read -rd '' -a instance_array <<< "$instance_ids"
