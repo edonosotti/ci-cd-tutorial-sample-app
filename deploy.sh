@@ -6,7 +6,7 @@ DOCKER_IMMAGE=$2
 AWS_REGION=$3
 
 # Retrieve the instance IDs associated with the Auto Scaling Group
-instance_ids=$(aws autoscaling describe-auto-scaling-instances --profile private --query "AutoScalingInstances[?AutoScalingGroupName=='$ASG'].InstanceId" --output text)
+instance_ids=$(aws autoscaling describe-auto-scaling-instances --query "AutoScalingInstances[?AutoScalingGroupName=='$ASG'].InstanceId" --output text)
 
 
 RUN_COMMANDS="aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo &&\
