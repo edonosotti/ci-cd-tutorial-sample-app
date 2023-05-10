@@ -157,7 +157,7 @@ jobs:
         echo "Start deploing to ASG-STAGE"
         DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secrets.ECR_REPOSITORY}}:latest
 
-        instance_ids=$(aws autoscaling describe-auto-scaling-instances --profile private --query "AutoScalingInstances[?AutoScalingGroupName=='$ASG_STAGE'].InstanceId" --output text)
+        instance_ids=$(aws autoscaling describe-auto-scaling-instances --query "AutoScalingInstances[?AutoScalingGroupName=='$ASG_STAGE'].InstanceId" --output text)
         RUN_COMMANDS="sudo touch /home/ubuntu/test111.txt &&\
               sudo touch /home/ubuntu/test333.txt &&\
               sudo touch /home/ubuntu/test444.txt "
