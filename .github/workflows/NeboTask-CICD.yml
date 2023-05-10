@@ -168,7 +168,7 @@ jobs:
         sudo echo ${{env.ECR_REPOSITORY}} && \
         sudo touch /home/ubuntu/test_file_run_command.txt"
 
-        aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands=[" touch /home/ubuntu/asg_stage.txt && "]
+        aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands=["sudo touch /home/ubuntu/asg_stage2.txt "]
         aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands=$RUN_COMANDS
         aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands="docker run -d -p 80:80 nginx"
 
