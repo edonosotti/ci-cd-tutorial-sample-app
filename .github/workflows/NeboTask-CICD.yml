@@ -155,7 +155,7 @@ jobs:
 
       run: |
         echo "Start deploing to ASG-STAGE"
-        DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{env.ECR_REPOSITORY}}:latest
+        DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secret.ECR_REPOSITORY}}:latest
         echo "DOCKER_IMAGE: $DOCKER_IMAGE"
         chmod +x deploy.sh
 
@@ -164,7 +164,7 @@ jobs:
         aws configure set region $AWS_REGION
         aws s3 ls
         RUN_COMANDS= "sudo aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY && \
-                      sudo docker pull ${{env.ECR_REPOSITORY}} && \
+                      sudo docker pull $DOCKER_IMAGE && \
                       echo ${{env.ECR_REPOSITORY}}
                       touch /home/ubuntu/test_file_run_command.txt
                       sudo docker stop nebo-repo || true && \
