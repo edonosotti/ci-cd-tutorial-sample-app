@@ -151,12 +151,11 @@ jobs:
         aws configure set region $AWS_REGION
 
         RUN_COMANDS="aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID &&\
-        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY"
+        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY &&\
+        echo "Works OK from GitHub action">>/home/ubuntu/sdg.txt
 
-
-
-        aws ssm send-command --instance-ids "i-0a372268d645629b9" --document-name "AWS-RunShellScript" --parameters commands="$RUN_COMANDS"
-        aws ssm send-command --instance-ids "i-0a372268d645629b9" --document-name "AWS-RunShellScript" --parameters commands="docker run -d -p 80:80 nginx "
+        aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands="$RUN_COMANDS"
+        aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands="docker run -d -p 80:80 nginx "
 
 
 
@@ -170,7 +169,10 @@ jobs:
 
     steps:
     - name: Print value from previus job prod
-      run: echo " PROD sha_short is ${{ steps.vars.outputs.sha_short }}"
+      run: |
+        echo " PROD sha_short is ${{ steps.vars.outputs.sha_short }}"
+        echo $image
+
 
 
 
