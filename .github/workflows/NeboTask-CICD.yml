@@ -157,15 +157,20 @@ jobs:
         echo "Start deploing to ASG-STAGE"
         DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secrets.ECR_REPOSITORY}}:latest
 
+        instance_ids=$(aws autoscaling describe-auto-scaling-instances --profile private --query "AutoScalingInstances[?AutoScalingGroupName=='$ASG_STAGE'].InstanceId" --output text)
         RUN_COMMANDS="sudo touch /home/ubuntu/test111.txt &&\
               sudo touch /home/ubuntu/test333.txt &&\
               sudo touch /home/ubuntu/test444.txt "
 
-        aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands=["sudo touch /home/ubuntu/asg_stage2.txt && \
+        IFS=$'\n' read -rd '' -a instance_array <<< "$instance_ids"
+        for instance_id in "${instance_array[@]}"; do
+          aws ssm send-command --region $AWS_REGION --instance-ids $instance_id --document-name AWS-RunShellScript --parameters "commands=$RUN_COMMANDS"
+        done
+        aws ssm send-command --instance-ids "i-0fc4db75ffe45c9ea" --document-name "AWS-RunShellScript" --parameters commands=["sudo touch /home/ubuntu/asg_stage2.txt && \
         sudo touch /home/ubuntu/asg_stage_line2.txt && \
         sudo touch /home/ubuntu/asg_stage_line3  "]
-        aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name AWS-RunShellScript --parameters "commands=$RUN_COMMANDS"
-        aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands="docker run -d -p 80:80 nginx"
+        aws ssm send-command --instance-ids "i-0fc4db75ffe45c9ea" --document-name AWS-RunShellScript --parameters "commands=$RUN_COMMANDS"
+        aws ssm send-command --instance-ids "i-0fc4db75ffe45c9ea" --document-name "AWS-RunShellScript" --parameters commands="docker run -d -p 80:80 nginx"
 
 
 
