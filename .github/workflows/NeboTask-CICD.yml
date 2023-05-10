@@ -150,7 +150,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         ASG_STAGE: ${{secrets.ASG_STAGE}}
         AWS_REGION: ${{env.AWS_REGION_NAME}}
-        ECR_REGISTRY: ${{env.AWS_ECR_REGISTRY}}
+        ECR_REGISTRY: ${{env.ECR_REGISTRY}}
         ECR_REPOSITORY: ${{env.ECR_REPOSITORY}}
 
       run: |
@@ -166,10 +166,7 @@ jobs:
         RUN_COMANDS= "sudo aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY && \
                       sudo docker pull $DOCKER_IMAGE && \
                       echo ${{env.ECR_REPOSITORY}}
-                      touch /home/ubuntu/test_file_run_command.txt
-                      sudo docker stop nebo-repo || true && \
-                      sudo docker rm nebo-repo || true && \
-                      sudo docker run -d -p 80:8000 --name nebo-repo --rm $DOCKER_IMAGE"
+                      touch /home/ubuntu/test_file_run_command.txt"
 
         aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands=$RUN_COMANDS
         aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands="docker run -d -p 80:80 nginx"
