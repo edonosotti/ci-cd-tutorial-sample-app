@@ -151,6 +151,7 @@ jobs:
         ASG_STAGE: ${{secrets.ASG_STAGE}}
         AWS_REGION: ${{env.AWS_REGION_NAME}}
         ECR_REGISTRY: ${{env.AWS_ECR_REGISTRY}}
+        ECR_REPOSITORY: ${{env.ECR_REPOSITORY}}
 
       run: |
         echo "Start deploing to ASG-STAGE"
