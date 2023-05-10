@@ -137,6 +137,13 @@ jobs:
         aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         aws-region: ${{env.AWS_REGION_NAME}}
 
+    - name: Connection to AWS ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      env:
+        AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
+        AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
+
     - name: Deployng into ASG-STAGE
       env:
         AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
@@ -144,9 +151,10 @@ jobs:
         ASG_STAGE: ${{secrets.ASG_STAGE}}
         AWS_REGION: ${{env.AWS_REGION_NAME}}
         ECR_REGISTRY: ${{env.AWS_ECR_REGISTRY}}
-        IMAGE:
 
       run: |
+        DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{env.ECR_REPOSITORY}}:latest
+        echo "DOCKER_IMAGE: $DOCKER_IMAGE"
         echo "Start deploing to ASG-STAGE"
         ls -la
         cat deploy.sh
