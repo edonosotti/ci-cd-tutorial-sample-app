@@ -128,10 +128,7 @@ jobs:
     - name: Print value from previus job
       run: echo " STAGE- sha_short is ${{ steps.vars.outputs.sha_short }}"
 
-    - name: Checkout files
-      uses: Bhacaz/checkout-files@v2
-      with:
-       files: deploy.sh
+    - uses: actions/checkout@v2
 
     - name: Configure AWS connections
       uses: aws-actions/configure-aws-credentials@v1

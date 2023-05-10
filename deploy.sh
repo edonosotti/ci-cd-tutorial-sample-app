@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 ASG_STAGE="asg_stage"
 AWS_REGION="eu-central-1"
 
