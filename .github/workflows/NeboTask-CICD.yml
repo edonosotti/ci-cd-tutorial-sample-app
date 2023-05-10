@@ -158,6 +158,7 @@ jobs:
         DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secrets.ECR_REPOSITORY}}:latest
         chmod +x deploy.sh
         ./deploy.sh $ASG_STAGE $DOCKER_IMAGE $AWS_REGION
+        ls
 
 ######################################################## 10.05  ####
 
