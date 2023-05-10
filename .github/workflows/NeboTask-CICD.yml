@@ -150,9 +150,9 @@ jobs:
         aws configure set aws_secret_access_key  $AWS_SECRET_ACCESS_KEY
         aws configure set region $AWS_REGION
 
-        RUN_COMANDS="aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID &&\
+        RUN_COMANDS = "aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID &&\
         aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY &&\
-        echo "Works OK from GitHub action">>/home/ubuntu/sdg.txt"
+        "
 
         aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands="$RUN_COMANDS"
         aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands="docker run -d -p 80:80 nginx"
