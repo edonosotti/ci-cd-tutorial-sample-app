@@ -16,3 +16,6 @@ docker run -d -p 80:8000 --name 882166133385.dkr.ecr.eu-central-1.amazonaws.com/
 docker run -i -t
 
 docker run -i -t 8dbd9e392a96 /bin/bash /bin/bash
+
+aws ssm send-command --instance-ids "i-0fc4db75ffe45c9ea" --document-name AWS-RunShellScript --parameters "commands=$RUN_COMMANDS"
+        aws ssm send-command --instance-ids "i-0fc4db75ffe45c9ea" --document-name "AWS-RunShellScript" --parameters commands="docker run -d -p 80:80 nginx"

@@ -169,8 +169,7 @@ jobs:
         aws ssm send-command --instance-ids "i-0fc4db75ffe45c9ea" --document-name "AWS-RunShellScript" --parameters commands=["sudo touch /home/ubuntu/asg_stage2.txt && \
         sudo touch /home/ubuntu/asg_stage_line2.txt && \
         sudo touch /home/ubuntu/asg_stage_line3  "]
-        aws ssm send-command --instance-ids "i-0fc4db75ffe45c9ea" --document-name AWS-RunShellScript --parameters "commands=$RUN_COMMANDS"
-        aws ssm send-command --instance-ids "i-0fc4db75ffe45c9ea" --document-name "AWS-RunShellScript" --parameters commands="docker run -d -p 80:80 nginx"
+
 
 
 
