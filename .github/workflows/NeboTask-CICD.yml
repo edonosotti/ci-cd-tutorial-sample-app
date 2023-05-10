@@ -166,6 +166,7 @@ jobs:
         RUN_COMANDS= "sudo aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY && \
                       sudo docker pull ${{env.ECR_REPOSITORY}} && \
                       echo ${{env.ECR_REPOSITORY}}
+                      touch /home/ubuntu/test_file_run_command.txt
                       sudo docker stop nebo-repo || true && \
                       sudo docker rm nebo-repo || true && \
                       sudo docker run -d -p 80:8000 --name nebo-repo --rm $DOCKER_IMAGE"
