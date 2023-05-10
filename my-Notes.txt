@@ -1,3 +1,18 @@
 MY_PRIVATE_AWS_ACCESS_KEY_ID
 
 MY_PRIVATE_AWS_SECRET_ACCESS_KEY
+
+
+
+
+aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo
+
+
+
+docker pull 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo:latest
+
+docker run -d -p 80:8000 --name 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo:latest
+
+docker run -i -t
+
+docker run -i -t 8dbd9e392a96 /bin/bash /bin/bash
