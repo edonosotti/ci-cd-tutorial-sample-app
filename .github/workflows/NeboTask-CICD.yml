@@ -156,8 +156,8 @@ jobs:
       run: |
         echo "Start deploing to ASG-STAGE"
         DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secrets.ECR_REPOSITORY}}:latest
-        aws autoscaling describe-auto-scaling-instances --query "AutoScalingInstances[?AutoScalingGroupName=='$ASG_STAGE'].InstanceId" --output text
-        aws autoscaling describe-auto-scaling-instances --instance-ids i-09f04c7ff300d0f59
+        aws autoscaling describe-auto-scaling-instances --query AutoScalingInstances[?AutoScalingGroupName==$ASG_STAGE].InstanceId --output text
+
         INSTANCE_IDs=$(aws autoscaling describe-auto-scaling-instances --query "AutoScalingInstances[?AutoScalingGroupName=='$ASG_STAGE'].InstanceId" --output text)
         echo "$INSTANCE_IDs"
         echo "Setep2"
