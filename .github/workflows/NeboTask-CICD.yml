@@ -155,7 +155,7 @@ jobs:
 
       run: |
         echo "Start deploing to ASG-STAGE"
-        DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secret.ECR_REPOSITORY}}:latest
+        DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secrets.ECR_REPOSITORY}}:latest
         echo "DOCKER_IMAGE: $DOCKER_IMAGE"
         chmod +x deploy.sh
 
