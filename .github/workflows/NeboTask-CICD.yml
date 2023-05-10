@@ -161,7 +161,12 @@ jobs:
         aws configure set aws_secret_access_key  $AWS_SECRET_ACCESS_KEY
         aws configure set region $AWS_REGION
         aws s3 ls
-        RUN_COMANDS= "aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY "
+        RUN_COMANDS= "sudo aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY && \
+                      sudo docker pull $DOCKER_IMAGE && \
+                      sudo docker stop nebo-repo || true && \
+                      sudo docker rm nebo-repo || true && \
+                      sudo docker run -d -p 80:8000 --name nebo-repo --rm $DOCKER_IMAGE"
+
         aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands=$RUN_COMANDS
         aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands="docker run -d -p 80:80 nginx"
 
