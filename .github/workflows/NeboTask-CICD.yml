@@ -157,8 +157,8 @@ jobs:
         echo "Start deploying to ASG-STAGE"
         DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secrets.ECR_REPOSITORY}}:latest
 
+        INSTANCE_IDs=$(aws autoscaling describe-auto-scaling-instances --query 'AutoScalingInstances[?AutoScalingGroupName=='${{secrets.ASG_STAGE}}'].InstanceId' --output text)
 
-        INSTANCE_IDs=$(aws autoscaling describe-auto-scaling-instances --query "AutoScalingInstances[?AutoScalingGroupName=='$ASG_STAGE'].InstanceId" --output text)
         RUN_COMMANDS="aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo &&\
                       docker pull 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo:latest &&\
                       docker run -d -p 80:8000 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo:latest"
