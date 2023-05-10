@@ -1,9 +1,12 @@
 #!/bin/bash
 
 
-ASG=$1
-DOCKER_IMMAGE=$2
-AWS_REGION=$3
+#ASG=$1
+#DOCKER_IMMAGE=$2
+#AWS_REGION=$3
+
+
+ASG="asg_stage"
 
 # Retrieve the instance IDs associated with the Auto Scaling Group
 instance_ids=$(aws autoscaling describe-auto-scaling-instances --query "AutoScalingInstances[?AutoScalingGroupName=='$ASG'].InstanceId" --output text)
