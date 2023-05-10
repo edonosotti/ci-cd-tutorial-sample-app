@@ -154,21 +154,21 @@ jobs:
         ECR_REPOSITORY: ${{env.ECR_REPOSITORY}}
 
       run: |
-        echo "Start deploing to ASG-STAGE"
+        echo "Start deploying to ASG-STAGE"
         DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secrets.ECR_REPOSITORY}}:latest
 
+
         instance_ids=$(aws autoscaling describe-auto-scaling-instances --query "AutoScalingInstances[?AutoScalingGroupName=='$ASG_STAGE'].InstanceId" --output text)
-        RUN_COMMANDS="sudo touch /home/ubuntu/test111.txt &&\
-              sudo touch /home/ubuntu/test333.txt &&\
-              sudo touch /home/ubuntu/test444.txt "
+        RUN_COMMANDS="aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo &&\
+                      docker pull 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo:latest &&\
+                      docker run -d -p 80:8000 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo:latest"
 
         IFS=$'\n' read -rd '' -a instance_array <<< "$instance_ids"
         for instance_id in "${instance_array[@]}"; do
           aws ssm send-command --region $AWS_REGION --instance-ids $instance_id --document-name AWS-RunShellScript --parameters "commands=$RUN_COMMANDS"
         done
-        aws ssm send-command --instance-ids "i-0fc4db75ffe45c9ea" --document-name "AWS-RunShellScript" --parameters commands=["sudo touch /home/ubuntu/asg_stage2.txt && \
-        sudo touch /home/ubuntu/asg_stage_line2.txt && \
-        sudo touch /home/ubuntu/asg_stage_line3  "]
+        echo "Deploying to ASG-STAGE finish successfully"
+
 
 
 
