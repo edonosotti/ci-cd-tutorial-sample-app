@@ -163,13 +163,7 @@ jobs:
         aws configure set aws_secret_access_key  $AWS_SECRET_ACCESS_KEY
         aws configure set region $AWS_REGION
         aws s3 ls
-        RUN_COMANDS="sudo aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY && \
-        sudo docker pull $DOCKER_IMAGE && \
-        sudo echo ${{env.ECR_REPOSITORY}} && \
-        sudo touch /home/ubuntu/test_file_run_command.txt"
-
         aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands=["sudo touch /home/ubuntu/asg_stage2.txt "]
-        aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands=$RUN_COMANDS
         aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands="docker run -d -p 80:80 nginx"
 
 
