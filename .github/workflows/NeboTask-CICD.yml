@@ -156,8 +156,10 @@ jobs:
       run: |
         echo "Start deploing to ASG-STAGE"
         DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secrets.ECR_REPOSITORY}}:latest
-        echo "DOCKER_IMAGE: $DOCKER_IMAGE"
-        chmod +x deploy.sh
+        instance_ids=$(aws autoscaling describe-auto-scaling-instances --profile private --query "AutoScalingInstances[?AutoScalingGroupName=='$ASG_STAGE'].InstanceId" --output text)
+        echo $instance_ids
+
+
 
         aws ssm send-command --instance-ids "i-09f04c7ff300d0f59" --document-name "AWS-RunShellScript" --parameters commands=["sudo touch /home/ubuntu/asg_stage2.txt && \
         sudo touch /home/ubuntu/asg_stage_line2.txt && \
