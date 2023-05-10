@@ -171,7 +171,7 @@ jobs:
 
 
 
-  deploing_prod:
+  deploing_prod: #Com
     name: Deploying to prod
     runs-on: ubuntu-latest
     needs: building_step
