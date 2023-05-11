@@ -170,7 +170,7 @@ jobs:
     name: Deploying to prod
     runs-on: ubuntu-latest
     needs: building_step
-    if: ${{ github.event.pull_request.merged }}
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
     steps:
     - name: Print value from previus job prod
