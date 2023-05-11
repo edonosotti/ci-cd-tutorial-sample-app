@@ -1,4 +1,4 @@
-Last Deployments status: <br>
+Last  Deployments status: <br>
 <img src="https://github.com/ViktorPakhai/ci-cd-tutorial-sample-app/workflows/MyNebo-CI-CD-Pipeline/badge.svg?branch=master"><br>
 
 # CD/CI Tutorial Sample Application
