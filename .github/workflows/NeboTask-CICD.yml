@@ -150,7 +150,7 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
         AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
-        ASG_STAGE: ${{secrets.ASG_STAGE}}
+        ASG_STAGE: ${{env.ASG_STAGE}}
         AWS_REGION: ${{env.AWS_REGION_NAME}}
         ECR_REGISTRY: ${{env.ECR_REGISTRY}}
         ECR_REPOSITORY: ${{env.ECR_REPOSITORY}}
