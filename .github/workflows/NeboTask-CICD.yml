@@ -160,7 +160,7 @@ jobs:
         ./deploy.sh $ASG_STAGE $DOCKER_IMAGE $AWS_REGION
         ls
 
-######################################################## 10.05  ####
+#####################  DEPLOY TO PROD###################################
 
 
 
@@ -176,7 +176,7 @@ jobs:
         echo " PROD sha_short is ${{ steps.vars.outputs.sha_short }}"
         echo $image
 
-
+#####################   NOTIFICATION    ###################################
   notification_stage:
     name: Slack notification
     runs-on: ubuntu-latest
@@ -187,8 +187,8 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: 'Deploy to STAGE was successful :rocket:'
-          SLACK_USERNAME: GitHub
+          SLACK_MESSAGE: 'Deploy to STAGE was successful !!! :rocket:'
+
 
 
 
