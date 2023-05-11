@@ -1,4 +1,4 @@
-name: MyNebo-CI/CD-Pipeline
+name: MyNebo-CI-CD-Pipeline
 env:
   AWS_REGION_NAME: "eu-central-1"
   DOCKER IMAGE_NAME: "FlaskAPP-"
