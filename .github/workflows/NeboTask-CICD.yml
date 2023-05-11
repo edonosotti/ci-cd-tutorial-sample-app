@@ -20,7 +20,7 @@ on:
     # The `branches` tag could also be omitted, yielding the same effect here.
     branches:
       - 'master'
-    types: [closed]
+
 
 
 jobs:
