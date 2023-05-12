@@ -13,7 +13,7 @@ RUN_COMMANDS="aws ecr get-login-password --region eu-central-1 | docker login --
               docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest &&\
               docker stop $ECR_REGISTRY/$ECR_REPOSITORY:latest || true &&\
               docker rm $ECR_REGISTRY/$ECR_REPOSITORY:latest   || true &&\
-              docker run -d --name ci-cd-app -p 80:8000 -it $ECR_REGISTRY/$ECR_REPOSITORY:latest"
+              docker run -d --name ci-cd-app -p 80:8000 -it $ECR_REGISTRY/$ECR_REPOSITORY:latest --rm $IMAGE"
 
 echo "Run_Command passed "
 # Execute AWS SSM command on each instance
