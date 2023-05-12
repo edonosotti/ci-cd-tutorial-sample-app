@@ -159,7 +159,7 @@ jobs:
         echo "Start deploying to ASG-STAGE"
         DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secrets.ECR_REPOSITORY}}:latest
         chmod +x deploy.sh
-        ./deploy.sh $ASG $DOCKER_IMAGE $AWS_REGION
+        ./deploy.sh
         echo "Deploying to ASG-STAGE was successful !!! "
 
 
