@@ -8,11 +8,11 @@ echo "APP will be deployed to: $instance_ids"
 
 RUN_COMMANDS="aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo &&\
               IMAGE=$($ECR_REGISTRY/$ECR_REPOSITORY:latest) &&\
-              echo "$IMAGE"
+              echo "$IMAGE" >> /home/ubuntu/image_name.txt
               docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest &&\
               docker stop $ECR_REGISTRY/$ECR_REPOSITORY:latest || true &&\
               docker rm $ECR_REGISTRY/$ECR_REPOSITORY:latest   || true &&\
-              docker run -d -p 80:8000 $ECR_REGISTRY/$ECR_REPOSITORY:latest"
+              docker run -d -p 80:8000 --name PythonAPP $ECR_REGISTRY/$ECR_REPOSITORY:latest"
 
 echo "Run_Command passed "
 # Execute AWS SSM command on each instance

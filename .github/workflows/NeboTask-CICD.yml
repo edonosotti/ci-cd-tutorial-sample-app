@@ -180,7 +180,7 @@ jobs:
 #####################   NOTIFICATION    ###################################
 
   notification_stage:
-    name: Slack notification for delivery
+    name: Slack notification for Delivery team
     runs-on: ubuntu-latest
     needs: healthchec
     steps:
@@ -192,7 +192,7 @@ jobs:
           SLACK_MESSAGE: 'Deploy to STAGE was successful !!! :rocket:'
 
   notification_prod:
-    name: Slack notification for DevOps
+    name: Slack notification for DevOps team
     runs-on: ubuntu-latest
     needs: healthchec_prod
     steps:
