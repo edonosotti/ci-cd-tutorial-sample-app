@@ -11,8 +11,8 @@ echo "APP will be deployed to: $instance_ids"
 RUN_COMMANDS="aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo &&\
               echo "$IMAGE" > /home/ubuntu/image_name.txt &&\
               docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest &&\
-              docker stop $ECR_REGISTRY/$ECR_REPOSITORY:latest || true &&\
-              docker rm $ECR_REGISTRY/$ECR_REPOSITORY:latest   || true &&\
+              docker stop ci-cd-app || true &&\
+              docker rm ci-cd-app   || true &&\
               docker run -d --name ci-cd-app -p 80:8000 -it $ECR_REGISTRY/$ECR_REPOSITORY:latest --rm $IMAGE"
 
 echo "Run_Command passed "
