@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ASG="asg_stage"
+
 IMAGE="82166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo"
 
 
