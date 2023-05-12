@@ -8,9 +8,12 @@ echo "asg is $ASG"
 echo "DOCKER_IMMAGE is $DOCKER_IMMAGE"
 echo "DOCKER_IMMAGE is $DOCKER_IMMAGE"
 echo "---------------------------------"
-
-echo "ECR_REGISTRY is ${{env.ECR_REGISTRY}}"
-echo "ECR_REPOSITORY is ${{env.ECR_REPOSITORY}}"
+echo "V1"
+echo "ECR_REGISTRY is ${{secrets.ECR_REGISTRY}}"
+echo "ECR_REPOSITORY is ${{secrets.ECR_REPOSITORY}}"
+echo "V2"
+echo "ECR_REGISTRY is $ECR_REGISTRY"
+echo "ECR_REPOSITORY is $ECR_REPOSITORY"
 
 
 # Retrieve the instance IDs associated with the Auto Scaling Group

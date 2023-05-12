@@ -150,16 +150,16 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
         AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
-        ASG_STAGE: ${{env.ASG_STAGE}}
+        ASG: ${{secrets.ASG_STAGE}}
         AWS_REGION: ${{env.AWS_REGION_NAME}}
-        ECR_REGISTRY: ${{env.ECR_REGISTRY}}
-        ECR_REPOSITORY: ${{env.ECR_REPOSITORY}}
+        ECR_REGISTRY: ${{secrets.ECR_REGISTRY}}
+        ECR_REPOSITORY: ${{secrets.ECR_REPOSITORY}}
 
       run: |
         echo "Start deploying to ASG-STAGE"
         DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secrets.ECR_REPOSITORY}}:latest
         chmod +x deploy.sh
-        ./deploy.sh $ASG_STAGE $DOCKER_IMAGE $AWS_REGION
+        ./deploy.sh $ASG $DOCKER_IMAGE $AWS_REGION
         echo "Deploying to ASG-STAGE was successful !!! "
 
 
