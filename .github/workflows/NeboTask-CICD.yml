@@ -152,8 +152,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         ASG: ${{secrets.ASG_STAGE}}
         AWS_REGION: ${{env.AWS_REGION_NAME}}
-        ECR_REGISTRY: ${{secrets.ECR_REGISTRY}}
-        ECR_REPOSITORY: ${{secrets.ECR_REPOSITORY}}
+        ECR_REGISTRY: ${{secrets.AWS_ECR}}
+        ECR_REPOSITORY: ${{secrets.AWS_ECR_NAME}}
 
       run: |
         echo "Start deploying to ASG-STAGE"
