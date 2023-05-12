@@ -158,10 +158,10 @@ jobs:
       run: |
         echo "Start deploying to ASG-STAGE"
         DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secrets.ECR_REPOSITORY}}:latest
-        aws autoscaling describe-auto-scaling-instances --query "AutoScalingInstances[?AutoScalingGroupName=='$ASG_STAGE'].InstanceId" --output text
         chmod +x deploy.sh
         ./deploy.sh $ASG_STAGE $DOCKER_IMAGE $AWS_REGION
-        ls
+        echo "Deploying to ASG-STAGE was successful !!! "
+
 
 #####################  DEPLOY TO PROD###################################
 
