@@ -1,14 +1,16 @@
 #!/bin/bash
 
-ASG=$1
-DOCKER_IMMAGE=$2
-#AWS_REGION=$3
+ASG=$0
+DOCKER_IMMAGE=$1
+AWS_REGION=$2
 
 echo "asg is $ASG"
 echo "DOCKER_IMMAGE is $DOCKER_IMMAGE"
+echo "DOCKER_IMMAGE is $DOCKER_IMMAGE"
+echo "---------------------------------"
 
-echo "ECR_REGISTRY is $ECR_REGISTRY"
-echo "ECR_REPOSITORY is $ECR_REPOSITORY"
+echo "ECR_REGISTRY is ${{env.ECR_REGISTRY}}"
+echo "ECR_REPOSITORY is ${{env.ECR_REPOSITORY}}"
 
 
 # Retrieve the instance IDs associated with the Auto Scaling Group
