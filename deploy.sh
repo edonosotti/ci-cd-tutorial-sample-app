@@ -13,7 +13,7 @@ RUN_COMMANDS="aws ecr get-login-password --region eu-central-1 | docker login --
               docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest &&\
               docker run -d -p 80:8000 $ECR_REGISTRY/$ECR_REPOSITORY:latest"
 
-echo "Run_Command passed"
+echo "Run_Command passed "
 # Execute AWS SSM command on each instance
 IFS=$'\n' read -rd '' -a instance_array <<< "$instance_ids"
 for instance_id in "${instance_array[@]}"; do
