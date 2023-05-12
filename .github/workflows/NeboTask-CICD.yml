@@ -79,7 +79,7 @@ jobs:
         aws-access-key-id: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
         aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         aws-region: ${{env.AWS_REGION_NAME}}
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     # - name: Connection to AWS ECR
     #   id: login-ecr
@@ -130,10 +130,10 @@ jobs:
     - name: Print value from previus job
       run: echo " STAGE- sha_short is ${{ steps.vars.outputs.sha_short }}"
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Configure AWS connections
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v2
       with:
         aws-access-key-id: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
         aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
@@ -184,7 +184,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: healthchec
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         env:
@@ -196,7 +196,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: healthchec_prod
     steps:
-      - uses: actions/checkout@v2
+      #- uses: actions/checkout@v2
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         env:
