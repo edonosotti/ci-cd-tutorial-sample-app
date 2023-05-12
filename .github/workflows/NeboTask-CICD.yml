@@ -1,7 +1,7 @@
 name: MyNebo-CI-CD-Pipeline
 env:
   AWS_REGION_NAME: "eu-central-1"
-  DOCKER IMAGE_NAME: "FlaskAPP-"
+  IMAGE_NAME: ${{secrets.AWS_ECR}}.${{secrets.AWS_ECR_NAME}}
 
 on:
   push:
@@ -155,9 +155,10 @@ jobs:
         ECR_REGISTRY: ${{secrets.AWS_ECR}}
         ECR_REPOSITORY: ${{secrets.AWS_ECR_NAME}}
 
+
       run: |
         echo "Start deploying to ASG-STAGE"
-        DOCKER_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secrets.ECR_REPOSITORY}}:latest
+        IMAGE=$IMAGE_NAME:latest
         chmod +x deploy.sh
         ./deploy.sh
         echo "Deploying to ASG-STAGE was successful !!! "
