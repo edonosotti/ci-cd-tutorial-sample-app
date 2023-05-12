@@ -1,13 +1,18 @@
 #!/bin/bash
 
 ASG=$1
-#DOCKER_IMMAGE=$2
+DOCKER_IMMAGE=$2
 #AWS_REGION=$3
 
-echo "$ASG"
+echo "asg is $ASG"
+echo "DOCKER_IMMAGE is $DOCKER_IMMAGE"
+
+echo "ECR_REGISTRY is $ECR_REGISTRY"
+echo "ECR_REPOSITORY is $ECR_REPOSITORY"
+
+
 # Retrieve the instance IDs associated with the Auto Scaling Group
 instance_ids=$(aws autoscaling describe-auto-scaling-instances --query "AutoScalingInstances[?AutoScalingGroupName=='$ASG'].InstanceId" --output text)
-
 
 RUN_COMMANDS="aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo &&\
               docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest &&\
