@@ -14,8 +14,8 @@ instance_ids=$(aws autoscaling describe-auto-scaling-instances --query "AutoScal
 
 
 RUN_COMMANDS="aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo &&\
-              docker pull 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo:latest &&\
-              docker run -d -p 80:8000 882166133385.dkr.ecr.eu-central-1.amazonaws.com/nebo-repo:latest"
+              docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest &&\
+              docker run -d -p 80:8000 $ECR_REGISTRY/$ECR_REPOSITORY:latest"
 
 
 # Execute AWS SSM command on each instance
