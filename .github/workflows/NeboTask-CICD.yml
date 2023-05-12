@@ -34,13 +34,13 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Use Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '16'
     - name: Setting up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: 3.8
 
@@ -74,7 +74,7 @@ jobs:
 
     steps:
     - name: Configure AWS connections
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v2
       with:
         aws-access-key-id: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
         aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
@@ -158,7 +158,6 @@ jobs:
 
       run: |
         echo "Start deploying to ASG-STAGE"
-        IMAGE=$IMAGE_NAME:latest
         chmod +x deploy.sh
         ./deploy.sh
         echo "Deploying to ASG-STAGE was successful !!! "
