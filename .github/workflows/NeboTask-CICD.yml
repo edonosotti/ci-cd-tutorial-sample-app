@@ -72,14 +72,14 @@ jobs:
     needs: testing_step
 
 
-    # steps:
-    # - name: Configure AWS connections
-    #   uses: aws-actions/configure-aws-credentials@v1
-    #   with:
-    #     aws-access-key-id: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
-    #     aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
-    #     aws-region: ${{env.AWS_REGION_NAME}}
-    # - uses: actions/checkout@v2
+    steps:
+    - name: Configure AWS connections
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
+        aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
+        aws-region: ${{env.AWS_REGION_NAME}}
+    - uses: actions/checkout@v2
 
     # - name: Connection to AWS ECR
     #   id: login-ecr
