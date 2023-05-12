@@ -180,7 +180,7 @@ jobs:
 #####################   NOTIFICATION    ###################################
 
   notification_stage:
-    name: Slack notification
+    name: Slack notification for delivery
     runs-on: ubuntu-latest
     needs: healthchec
     steps:
@@ -190,6 +190,18 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_MESSAGE: 'Deploy to STAGE was successful !!! :rocket:'
+
+  notification_stage:
+    name: Slack notification for DevOps
+    runs-on: ubuntu-latest
+    needs: healthchec
+    steps:
+      - uses: actions/checkout@v2
+      - name: Slack Notification
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_MESSAGE: 'Deploy to PROD was successful !!! :rocket:'
 
 
 #####################   HEALTHCHECK    ###################################
