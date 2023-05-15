@@ -80,11 +80,13 @@ jobs:
         aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         aws-region: ${{env.AWS_REGION_NAME}}
     - uses: actions/checkout@v3
-    - name: SendGrid Action
-      uses: mmichailidis/sendgrid-mail-action@v1.0
+
+    - name: TEst message
+      uses: cinotify/github-action@main
       with:
-        sendgrid-token: 'sample'
-        mail: 'sdgadmin@gmail.com'
+        to: 'sdgadmin@gmail.com'
+        subject: 'building main'
+        body: 'This is a notification from GitHub actions.'
 
     # - name: Connection to AWS ECR
     #   id: login-ecr
