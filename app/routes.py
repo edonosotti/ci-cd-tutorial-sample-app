@@ -5,7 +5,7 @@ from app.models import Menu
 
 @app.route('/')
 def home():
-	return jsonify({ "status": "ok v.1.0.0" })
+	return jsonify({ "status": "ok" })
 
 @app.route('/menu')
 def menu():
