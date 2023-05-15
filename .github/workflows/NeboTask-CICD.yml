@@ -81,44 +81,46 @@ jobs:
         aws-region: ${{env.AWS_REGION_NAME}}
     - uses: actions/checkout@v3
 
-     # - name: Connection to AWS ECR
-    #   id: login-ecr
-    #   uses: aws-actions/amazon-ecr-login@v1
-    #   env:
-    #     AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
-    #     AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
+    - name: Connection to AWS ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      env:
+        AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
+        AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
 
-    # - name: Set outputs
-    #   id: vars
-    #   run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-#Build image
-    # - name: Build image and push to ECR registry with latest tag
-    #   env:
-    #     AWS_REGION: ${{env.AWS_REGION_NAME}}
-    #     ECR_REPOSITORY: "nebo-repo"
-    #     ECR_REGISTRY: ${{env.AWS_ECR_REGISTRY}}
-    #     IMAGE_TAG: latest
-    #   run: |
-    #     export ECR_REGISTRY=${{steps.login-ecr.outputs.registry}}
-    #     docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-    #     echo "Pushing image to ECR..."
-    #     docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-    #     echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+    - name: Set outputs
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-    # - name: Build image and push to ECR registry with sha_short
-    #   env:
-    #     AWS_REGION: ${{env.AWS_REGION_NAME}}
-    #     ECR_REPOSITORY: "nebo-repo"
-    #     ECR_REGISTRY: ${{env.AWS_ECR_REGISTRY}}
+#####   Build image ####
+
+    - name: Build image and push to ECR registry with latest tag
+      env:
+        AWS_REGION: ${{env.AWS_REGION_NAME}}
+        ECR_REPOSITORY: "nebo-repo"
+        ECR_REGISTRY: ${{env.AWS_ECR_REGISTRY}}
+        IMAGE_TAG: latest
+      run: |
+        export ECR_REGISTRY=${{steps.login-ecr.outputs.registry}}
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        echo "Pushing image to ECR..."
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+    - name: Build image and push to ECR registry with sha_short
+      env:
+        AWS_REGION: ${{env.AWS_REGION_NAME}}
+        ECR_REPOSITORY: "nebo-repo"
+        ECR_REGISTRY: ${{env.AWS_ECR_REGISTRY}}
 
 
-    #   run: |
-    #       export ECR_REGISTRY=${{steps.login-ecr.outputs.registry}}
-    #       docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.vars.outputs.sha_short }} .
-    #       echo "Pushing image to ECR..."
-    #       echo " sha_short is ${{ steps.vars.outputs.sha_short }}"
-    #       docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.vars.outputs.sha_short }}
-    #       echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.vars.outputs.sha_short }}"
+      run: |
+          export ECR_REGISTRY=${{steps.login-ecr.outputs.registry}}
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.vars.outputs.sha_short }} .
+          echo "Pushing image to ECR..."
+          echo " sha_short is ${{ steps.vars.outputs.sha_short }}"
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.vars.outputs.sha_short }}
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.vars.outputs.sha_short }}"
 
   deploing_stage:
     name: Deploying to stage
