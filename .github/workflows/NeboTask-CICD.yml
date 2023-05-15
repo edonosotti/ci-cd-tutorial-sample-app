@@ -196,7 +196,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: healthchec_prod
     steps:
-
       - uses: cinotify/github-action@main
         with:
           to: 'sdgadmin@gmail.com'
