@@ -80,6 +80,11 @@ jobs:
         aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         aws-region: ${{env.AWS_REGION_NAME}}
     - uses: actions/checkout@v3
+    - name: SendGrid Action
+      uses: mmichailidis/sendgrid-mail-action@v1.0
+      with:
+        sendgrid-token: 'sample'
+        mail: 'sdgadmin@gmail.com'
 
     # - name: Connection to AWS ECR
     #   id: login-ecr
