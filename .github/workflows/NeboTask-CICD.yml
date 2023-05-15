@@ -204,7 +204,7 @@ jobs:
         body: 'Deploy to PROD env was successful !!! :rocket:'
 
 
-#####################   HEALTHCHECK    ###################################
+#####################   HEALTHCHECK    ####################################
 
   healthchec:
       name: Healthcheck
