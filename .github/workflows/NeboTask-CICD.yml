@@ -81,14 +81,7 @@ jobs:
         aws-region: ${{env.AWS_REGION_NAME}}
     - uses: actions/checkout@v3
 
-    - name: TEst message
-      uses: cinotify/github-action@main
-      with:
-        to: 'sdgadmin@gmail.com'
-        subject: 'building main'
-        body: 'This is a notification from GitHub actions.'
-
-    # - name: Connection to AWS ECR
+     # - name: Connection to AWS ECR
     #   id: login-ecr
     #   uses: aws-actions/amazon-ecr-login@v1
     #   env:
@@ -203,12 +196,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: healthchec_prod
     steps:
-      #- uses: actions/checkout@v2
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: 'Deploy to PROD was successful !!! :rocket:'
+      - name: Send email
+      uses: cinotify/github-action@main
+      with:
+        to: '${{secrets.EMAIL_DEVOPS}}'
+        subject: 'building main'
+        body: 'Deploy to PROD env was successful !!! :rocket:'
 
 
 #####################   HEALTHCHECK    ###################################
