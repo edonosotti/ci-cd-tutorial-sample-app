@@ -170,7 +170,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: building_step
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-
     steps:
       - name: Configure AWS connections
       uses: aws-actions/configure-aws-credentials@v2
@@ -178,14 +177,6 @@ jobs:
         aws-access-key-id: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
         aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         aws-region: ${{env.AWS_REGION_NAME}}
-
-      - name: Connection to AWS ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-      env:
-        AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
-        AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
-
       - name: Deployng into ASG-STAGE
       env:
         AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
@@ -194,13 +185,11 @@ jobs:
         AWS_REGION: ${{env.AWS_REGION_NAME}}
         ECR_REGISTRY: ${{secrets.AWS_ECR}}
         ECR_REPOSITORY: ${{secrets.AWS_ECR_NAME}}
-
-
       run: |
-        echo "Start deploying to ASG-STAGE"
+        echo "Start deploying to ASG-PROD"
         chmod +x deploy.sh
         ./deploy.sh
-        echo "Deploying to ASG-SPROD was successful !!! "
+        echo "Deploying to ASG-PROD was successful !!! "
 
 #####################   NOTIFICATION    ###################################
 
