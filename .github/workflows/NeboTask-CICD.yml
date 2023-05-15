@@ -57,6 +57,7 @@ jobs:
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        echo "${GIT_AUTHOR_EMAIL}"
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Test with unittest
@@ -177,7 +178,7 @@ jobs:
         aws-access-key-id: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
         aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
         aws-region: ${{env.AWS_REGION_NAME}}
-    - name: Deployng into ASG-STAGE
+    - name: Deployng into ASG-PROD
       env:
         AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
         AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
