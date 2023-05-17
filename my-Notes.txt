@@ -40,3 +40,24 @@ aws ssm send-command --instance-ids "i-0fc4db75ffe45c9ea" --document-name "AWS-R
         done
         echo "Deploying to ASG-STAGE finish successfully"
 
+-------------------------
+Step for GitHub-action - sonarcloud
+
+  sonarcloud:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@v1.3
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dproject.settings=../sonar-project.properties/
+          -Dsonar.tests=tests/
+          -Dsonar.verbose=true
