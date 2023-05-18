@@ -47,31 +47,6 @@ jobs:
         echo "Testing finished successfully"
   #Build and push the Docker image
 
-  building_step:
-    name: Building image
-    runs-on: ubuntu-latest
-    needs: testing_step
-
-
-    steps:
-    - name: Configure AWS connections
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
-        aws-secret-access-key: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
-        aws-region: ${{env.AWS_REGION_NAME}}
-    - uses: actions/checkout@v3
-
-    - name: Connection to AWS ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-      env:
-        AWS_ACCESS_KEY_ID: ${{secrets.MY_PRIVATE_AWS_ACCESS_KEY_ID}}
-        AWS_SECRET_ACCESS_KEY: ${{secrets.MY_PRIVATE_AWS_SECRET_ACCESS_KEY}}
-
-    - name: Set outputs
-      id: vars
-      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
   sonarcloud:
     needs: building_step
