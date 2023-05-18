@@ -5,12 +5,12 @@ from app.models import Menu
 
 secret="U#2LKAb]UH>B9j"
 pwd = input("Enter password: ")
-def user()db:
+def user(db):
     user =UserFactory(password="mypawwsorf")
-def user()db:
+def user(db):
     user =UserFactory(password="mypawwsorf")
 
-def user()db:
+def user(db):
     user =UserFactory(password="mypawwsorf")
 
 
