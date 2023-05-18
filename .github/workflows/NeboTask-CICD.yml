@@ -4,7 +4,7 @@ env:
   IMAGE_NAME: ${{secrets.AWS_ECR}}.${{secrets.AWS_ECR_NAME}}
 
 on:
-  push:
+  #push:
     # Match all branches *without* a / in the name.
     # This will exclude "sub" branches, such as "feature branches",
     # named something like: "feature/my-feature". Those branches will
@@ -12,15 +12,15 @@ on:
     # on the local machine and avoid using up GitHub Actions credits
     # (if applicable, such as in `private` repositories).
     # Filter syntax info: https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
-    branches:
-      - 'stage'
-      - 'master'
-  pull_request:
+  #  branches:
+  #    - 'stage'
+  #    - 'master'
+ # pull_request:
     # Since pull requests come from "third parties", we will automatically
     # test everything coming from the outside world, for good measure.
     # The `branches` tag could also be omitted, yielding the same effect here.
-    branches:
-      - 'master'
+ #   branches:
+  #    - 'master'
 
 
 

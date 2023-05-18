@@ -3,6 +3,8 @@ from app import app
 from app import db
 from app.models import Menu
 
+secret="U#2LKAb]UH>B9j"
+
 @app.route('/')
 def home():
 	return jsonify({ "status": "ok",
