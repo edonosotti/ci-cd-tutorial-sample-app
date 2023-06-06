@@ -3,8 +3,8 @@ env:
   AWS_REGION_NAME: "eu-central-1"
   IMAGE_NAME: ${{secrets.AWS_ECR}}.${{secrets.AWS_ECR_NAME}}
 
-#on:
-  #push:
+on:
+  push:
     # Match all branches *without* a / in the name.
     # This will exclude "sub" branches, such as "feature branches",
     # named something like: "feature/my-feature". Those branches will
@@ -12,17 +12,15 @@ env:
     # on the local machine and avoid using up GitHub Actions credits
     # (if applicable, such as in `private` repositories).
     # Filter syntax info: https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
-  #  branches:
-  #    - 'stage'
-  #    - 'master'
- # pull_request:
+    branches:
+      - 'stage'
+      - 'master'
+  pull_request:
     # Since pull requests come from "third parties", we will automatically
     # test everything coming from the outside world, for good measure.
     # The `branches` tag could also be omitted, yielding the same effect here.
- #   branches:
-  #    - 'master'
-
-
+    branches:
+      - 'master'
 
 jobs:
   # Run code tests before building the image, to ensure it is good to go
@@ -63,7 +61,18 @@ jobs:
       run: |
         python -m unittest discover
         echo "Testing finished successfully"
-  #Build and push the Docker image
+
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@v1.3
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+        args: >
+            -Dproject.settings=../sonar-project.properties/
+
+
+     #Build and push the Docker image
 
   building_step:
     name: Building image
