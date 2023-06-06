@@ -68,6 +68,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: testing_step
     steps:
+    - uses: actions/checkout@v3
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@v1.3
       env:
