@@ -11,7 +11,7 @@ def home():
 
 @app.route('/menu')
 def menu():
-    today = Menu.query.first()
+    today=Menu.query.first()
     if today:
         body = { "today_special": today.name }
         status = 200
