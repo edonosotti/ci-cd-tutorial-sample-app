@@ -44,7 +44,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 ruff
+        pip install flake8 ruff allure-pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Initalize and seed the database
       run: |
@@ -61,6 +61,9 @@ jobs:
       run: |
         python -m unittest discover
         echo "Testing finished successfully"
+
+    - name: Generate Allure report
+      run: allure generate allure-results
 
     - name: Test marketplace action1
       uses: simple-elf/allure-report-action@master
