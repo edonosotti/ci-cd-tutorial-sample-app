@@ -89,10 +89,11 @@ jobs:
       uses: Sibz/github-status-action@v1
       with:
               authToken: ${{secrets.GITHUB_TOKEN}}
+              description: "test description"
               context: 'Test report'
               state: 'success'
               sha: ${{ github.event.pull_request.head.sha }}
-              target_url: viktorpakhai.github.io/ci-cd-tutorial-sample-app/${{ github.run_number }}
+              target_url: https://viktorpakhai.github.io/ci-cd-tutorial-sample-app/${{ github.run_number }}
 
 
   sonar_step:
