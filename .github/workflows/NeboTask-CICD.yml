@@ -64,7 +64,10 @@ jobs:
         echo "Testing finished successfully"
 
     - name: Generate Allure report
-      run: allure generate allure-results
+      run: |
+        allure generate allure-results
+        ls -l allure-report
+
 
     - name: Test marketplace action1
       uses: simple-elf/allure-report-action@master
@@ -84,16 +87,6 @@ jobs:
           PUBLISH_BRANCH: gh-pages
           PUBLISH_DIR: allure-history
 
-    - name: Post the link to the report
-      if: always()
-      uses: Sibz/github-status-action@v1
-      with:
-              authToken: ${{secrets.GITHUB_TOKEN}}
-              description: "test description"
-              context: 'Test report'
-              state: 'success'
-              sha: ${{ github.event.pull_request.head.sha }}
-              target_url: https://viktorpakhai.github.io/ci-cd-tutorial-sample-app/
 
 
   sonar_step:
