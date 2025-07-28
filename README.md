@@ -4,7 +4,7 @@
 
 # CD/CI Tutorial Sample Application
 
-## Description
+## Descriptio
 
 This sample Python REST API application was written for a tutorial on implementing Continuous Integration and Delivery pipelines
 
