@@ -1,3 +1,4 @@
+# .github/workflows/python-flask-ci.yml
 name: Python Flask CI
 
 on:
@@ -6,19 +7,21 @@ on:
   pull_request:
     branches: [ dev ]
 
-env: # Add environment variables needed for Docker build/push
+env:
   PROJECT_ID: 'thermal-hour-467308-u4'
   GAR_NAME: 'gh-demo'
   REGION: 'us-central1'
-  SERVICE: 'gitactionnew' # Although not deployed, useful for image naming
+  SERVICE: 'gitactionnew'
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    outputs: # <--- NEW: Define outputs for this job
+      image_name: ${{ steps.build_push_image.outputs.image_name }} # Expose the image name from the step below
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # Changed to v4 for consistency with your deploy workflow
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -33,30 +36,25 @@ jobs:
 
       - name: Run tests
         run: |
-          python -m pytest # Corrected command for pytest
+          python -m pytest # Corrected command to run pytest
 
-      # --- Start of Docker Build and Push steps ---
       - name: 'Authenticate to Google Cloud with SA Key'
-        # This uses your secret for authentication to GCP services, including Google Artifact Registry
         uses: google-github-actions/auth@v2
         with:
           credentials_json: '${{ secrets.ABC }}'
 
       - name: 'Set up gcloud CLI'
-        # Required for gcloud commands like 'gcloud auth configure-docker'
         uses: google-github-actions/setup-gcloud@v2
 
       - name: 'Docker Auth to Google Artifact Registry'
-        # Authenticates Docker to push images to Google Artifact Registry
         run: gcloud auth configure-docker "${{ env.REGION }}-docker.pkg.dev"
 
       - name: 'Build and Push Docker Image to Google Artifact Registry'
-        # Builds your Docker image and pushes it to the specified repository
+        id: build_push_image # <--- NEW: Add an ID to this step to reference its outputs
         run: |
-          # Construct the full image name including region, project ID, GAR name, service, and commit SHA
           IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_NAME }}/${{ env.SERVICE }}:${{ github.sha }}"
           echo "Building Docker image: $IMAGE"
           docker build -t "$IMAGE" .
           echo "Pushing Docker image: $IMAGE"
           docker push "$IMAGE"
-      # --- End of Docker Build and Push steps ---
+          echo "image_name=$IMAGE" >> "$GITHUB_OUTPUT" # <--- NEW: Set the output for this step
