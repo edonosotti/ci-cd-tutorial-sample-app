@@ -30,13 +30,13 @@ def home():
             <p>This app manages a sample menu. Below are the available API endpoints:</p>
             <ul>
                 <li><code>GET /menu</code> – List all menu items</li>
-                <li><code>GET /menu/&lt;item_id&gt;</code> – Get a menu item by ID</li>
                 <li><code>GET /menu/names</code> – Get all menu item names</li>
                 <li><code>GET /menu/stock/total</code> – Get total quantity in stock</li>
                 <li><code>GET /menu/summary</code> – Get summary: IDs, names, quantities</li>
                 <li><code>GET /menu/available/&lt;min_qty&gt;</code> – Filter items by minimum quantity</li>
                 <li><code>GET /menu/sorted/price</code> – List items sorted by price</li>
                 <li><code>GET /menu/under/&lt;max_price&gt;</code> – List items priced below a value</li>
+                <li><code>GET /menu/&lt;item_id&gt;</code> – Get a menu item by ID</li>
             </ul>
             <p>Example: <a href="/menu">/menu</a></p>
         </body>
