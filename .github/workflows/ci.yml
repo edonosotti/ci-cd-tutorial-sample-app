@@ -9,7 +9,7 @@ on:
       - dev-branch
 
 jobs:
-  build-and-test:
+  commit-and-test:
     runs-on: ubuntu-latest
 
     steps:
