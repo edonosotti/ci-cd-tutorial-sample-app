@@ -24,7 +24,7 @@ def add_menu_item():
     price = data.get("price")
 
     if not name or price is None:
-        return jsonify({"error": "Missing 'name' or 'price'"}), 400
+        return jsonify({"error": "Missing 'name' or 'price simple change'"}), 400
 
     item = {
         "id": next_id,
