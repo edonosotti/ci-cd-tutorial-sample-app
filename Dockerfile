@@ -2,8 +2,10 @@
 FROM python:3.11-slim
 
 # Set environment variables for Python in Docker
-ENV PYTHONDONTWRITEBYTECODE=1 # Prevents Python from writing .pyc files
-ENV PYTHONUNBUFFERED=1     # Ensures Python output is sent immediately to the terminal
+# Prevents Python from writing .pyc files
+ENV PYTHONDONTWRITEBYTECODE=1
+# Ensures Python output is sent immediately to the terminal
+ENV PYTHONUNBUFFERED=1
 # Add /app to PYTHONPATH so Python can find your 'app' package
 ENV PYTHONPATH=/app:$PYTHONPATH
 
