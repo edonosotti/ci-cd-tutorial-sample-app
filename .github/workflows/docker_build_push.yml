@@ -13,13 +13,13 @@ on:
     # (if applicable, such as in `private` repositories).
     # Filter syntax info: https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
     branches:
-      - '*'
+      - "*"
   pull_request:
     # Since pull requests come from "third parties", we will automatically
     # test everything coming from the outside world, for good measure.
     # The `branches` tag could also be omitted, yielding the same effect here.
     branches:
-      - '**'
+      - "**"
   release:
     types: [published, edited]
 
@@ -33,28 +33,28 @@ jobs:
         python-version: [3.8] # Using a list so it's extensible for future use
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setting up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v2
+      - name: Setting up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Lint the code with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Lint the code with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-    - name: Test with unittest
-      run: |
-        python -m unittest discover
+      - name: Test with unittest
+        run: |
+          python -m unittest discover
 
   # Build and push the Docker image
   push_to_registry:
@@ -67,14 +67,24 @@ jobs:
         uses: actions/checkout@v2
         # if: ${{ github.ref == 'ref/head/master' }} # Info: https://docs.github.com/en/free-pro-team@latest/actions/reference/context-and-expression-syntax-for-github-actions#about-contexts-and-expressions
 
-      - name: Build and push image to the Docker Hub
-        uses: docker/build-push-action@v1 # Info: https://github.com/docker/build-push-action/tree/releases/v1#tags
-        # if: ${{ github.ref == 'ref/head/master' }}
+      - name: "Set up QEMU"
+        uses: "docker/setup-qemu-action@v3"
+
+      - name: "Set up Docker Buildx"
+        uses: "docker/setup-buildx-action@v3"
+
+      - name: "Login to Docker Hub"
+        uses: "docker/login-action@v3"
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          repository: ${{ secrets.DOCKERHUB_REPOSITORY }}
-          tag_with_ref: true # Info: https://github.com/docker/build-push-action/tree/releases/v1#tag_with_ref
-          tag_with_sha: true # Info: https://github.com/docker/build-push-action/tree/releases/v1#tag_with_sha
-          tags: latest
-          # push: ${{ startsWith(github.ref, 'refs/tags/') }}
+          username: "${{ secrets.DOCKERHUB_USERNAME }}"
+          password: "${{ secrets.DOCKERHUB_PASSWORD }}"
+
+      - name: "Build and push image tags"
+        uses: "docker/build-push-action@v6"
+        with:
+          context: "."
+          platforms: "linux/amd64,linux/arm64"
+          push: true
+          tags: |
+            "${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest"
+            "${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:${{ github.ref_name }}"
