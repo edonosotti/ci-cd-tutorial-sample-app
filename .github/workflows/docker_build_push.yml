@@ -67,9 +67,6 @@ jobs:
         uses: actions/checkout@v2
         # if: ${{ github.ref == 'ref/head/master' }} # Info: https://docs.github.com/en/free-pro-team@latest/actions/reference/context-and-expression-syntax-for-github-actions#about-contexts-and-expressions
 
-      - name: "Set up QEMU"
-        uses: "docker/setup-qemu-action@v3"
-
       - name: "Set up Docker Buildx"
         uses: "docker/setup-buildx-action@v3"
 
@@ -83,7 +80,7 @@ jobs:
         uses: "docker/build-push-action@v6"
         with:
           context: "."
-          platforms: "linux/amd64,linux/arm64"
+          platforms: "linux/amd64"
           push: true
           tags: |
             "${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest"
