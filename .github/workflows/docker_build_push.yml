@@ -91,7 +91,7 @@ jobs:
             docker rm sample-app || true
 
             # Login to GitHub Container Registry
-            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
             # Pull the latest dev image
             docker pull ghcr.io/${{ github.repository }}:dev

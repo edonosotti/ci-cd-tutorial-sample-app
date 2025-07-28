@@ -92,14 +92,17 @@ jobs:
             docker rm sample-app-staging || true
 
             # Login to GitHub Container Registry
-            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
             # Pull the latest staging image
             docker pull ghcr.io/${{ github.repository }}:staging
 
             # Run the new container
-            docker run -d 
-              --name sample-app-staging 
-              --restart unless-stopped 
-              -p 80:8000 
+            docker run -d \
+              --name sample-app-staging \
+              --restart unless-stopped \
+              -p 80:8000 \
               ghcr.io/${{ github.repository }}:staging
+
+            # Clean up old images
+            docker image prune -f
