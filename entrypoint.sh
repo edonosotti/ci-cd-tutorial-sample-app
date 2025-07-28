@@ -1,21 +1,25 @@
 #!/bin/sh
 
-# This script will be executed when the Docker container starts.
+echo "Starting entrypoint script..."
 
-# Run Flask database migrations
-# Ensure FLASK_APP is set correctly if your app entry point is not app.py
-# If your Flask app instance is named 'app' inside an 'app' package (e.g., app/__init__.py),
-# you might need FLASK_APP=app or rely on Flask's auto-discovery.
-# If your main app file is app.py and the instance is 'app', it should work.
+# Set FLASK_APP to 'app' (the package name).
+# This is crucial for Flask CLI commands and Gunicorn to find your application instance.
+export FLASK_APP=app
+
 echo "Running database migrations..."
-# Check if the 'app' module can be found for Flask CLI (optional but good for debugging)
-if ! python -c "import app" &> /dev/null; then
-  echo "Error: Could not import 'app' module. Ensure it's in the root or FLASK_APP is set."
+# Execute migrations. Redirecting stderr to stdout (2>&1) ensures errors are logged to Cloud Logging.
+# The 'set -e' (often implied by shebang or default shell behavior) will cause the script to exit
+# immediately if 'flask db upgrade' fails, which is desired for failed deployments.
+if flask db upgrade 2>&1; then
+  echo "Database migrations completed successfully."
+else
+  echo "ERROR: Database migrations failed!"
+  # Exit with a non-zero status to indicate failure to Cloud Run.
   exit 1
 fi
-flask db upgrade
 
-# Execute the main command passed to the container (e.g., gunicorn)
-# This allows you to pass arguments like 'gunicorn app:app -b 0.0.0.0:8080'
-# as the CMD in the Dockerfile, and it will be executed here.
-exec "$@"
+echo "Starting Gunicorn server..."
+# Cloud Run injects the PORT environment variable (defaulting to 8080).
+# Ensure Gunicorn binds to 0.0.0.0 and uses this PORT variable.
+# The ${PORT:-8080} syntax provides a fallback to 8080 if PORT isn't set (e.g., for local testing).
+exec gunicorn app:app -b 0.0.0.0:${PORT:-8080}
