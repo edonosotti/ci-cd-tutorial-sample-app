@@ -17,3 +17,7 @@ def menu():
         body = { "error": "Sorry, the service is not available today." }
         status = 404
     return jsonify(body), status
+
+@app.route('/ucsc')
+def ucsc():
+    return jsonify({ "name": "University of Colombo School of Computing", "location": "Colombo, Sri Lanka" })
