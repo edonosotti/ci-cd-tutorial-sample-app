@@ -69,3 +69,39 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.ref == 'refs/heads/dev' && 'dev' || 'latest' }}
             ghcr.io/${{ github.repository }}:${{ github.sha }}
+
+  # Deploy to Digital Ocean server
+  deploy:
+    name: Deploy to Digital Ocean Dev Server
+    # Only deploy when pushing to dev branch
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    needs: [build, push_to_registry]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Digital Ocean server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.DO_SSH_KEY }}
+          port: ${{ secrets.DO_PORT || 22 }}
+          script: |
+            # Stop and remove existing container
+            docker stop sample-app || true
+            docker rm sample-app || true
+
+            # Login to GitHub Container Registry
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            # Pull the latest dev image
+            docker pull ghcr.io/${{ github.repository }}:dev
+
+            # Run the new container
+            docker run -d \
+              --name sample-app \
+              --restart unless-stopped \
+              -p 8000:8000 \
+              ghcr.io/${{ github.repository }}:dev
+
+            # Clean up old images
+            docker image prune -f
