@@ -1,29 +1,23 @@
-name: CD - Deploy to Staging
+name: CD to Docker Hub
 
 on:
   push:
     branches:
-      - staging
+      - staging-branch   # or any branch you want to trigger deployment from
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+    - name: Build the Docker image
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/my-app:latest .
 
-      - name: Deploy to staging
-        run: |
-          echo "Deploying to staging..."
-          # Replace this with your real deployment command
-          echo "Deployed at $(date)" > deployment-log.txt
+    - name: Push the Docker image
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/my-app:latest
