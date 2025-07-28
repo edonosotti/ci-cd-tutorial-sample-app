@@ -37,3 +37,8 @@ def menu_summary():
         "ids": ids,
         "quantities": quantities
         })
+
+        @app.route("/menu/available/<int:min_qty>", methods=["GET"])
+def get_items_with_min_quantity(min_qty):
+    filtered = [item for item in menu_items if item["quantity"] >= min_qty]
+    return jsonify({"menu": filtered})
