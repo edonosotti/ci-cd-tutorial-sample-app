@@ -48,13 +48,13 @@ def menu_summary():
         "quantities": quantities
         })
 
- @app.route("/menu/available/<int:min_qty>", methods=["GET"])
+@app.route("/menu/available/<int:min_qty>", methods=["GET"])
 def get_items_with_min_quantity(min_qty):
     filtered = [item for item in menu_items if item["quantity"] >= min_qty]
     return jsonify({"menu": filtered})
 
 
- @app.route("/menu/sorted/price", methods=["GET"])
+@app.route("/menu/sorted/price", methods=["GET"])
 def get_sorted_by_price():
     sorted_items = sorted(menu_items, key=lambda x: x["price"])
     return jsonify({"menu": sorted_items})
