@@ -9,3 +9,8 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 from app import routes, models
+
+menu_items = [
+    {"id": 1, "name": "Pizza", "price": 1200},
+    {"id": 2, "name": "Burger", "price": 900}
+]
