@@ -18,7 +18,7 @@ EXPOSE 8080
 # Install dependencies
 # Copy requirements files first to leverage Docker's caching.
 COPY requirements.txt .
-COPY requirements-server.txt . # Assuming you still have/need this file
+COPY requirements-server.txt . 
 
 # Install Python dependencies.
 RUN pip install --no-cache-dir --upgrade pip && \
