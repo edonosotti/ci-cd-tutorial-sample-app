@@ -21,8 +21,9 @@ class BasicTests(unittest.TestCase):
             os.environ.get('TEST_DATABASE_URL') or \
             'sqlite:///' + TEST_DB
         self.app = app.test_client()
-        db.drop_all()
-        db.create_all()
+        with app.app_context():
+            db.drop_all()
+            db.create_all()
 
     def tearDown(self):
         pass
@@ -41,13 +42,14 @@ class BasicTests(unittest.TestCase):
     def test_menu_item(self):
         test_name = "test"
         test_item = Menu(name=test_name)
-        db.session.add(test_item)
-        db.session.commit()
+        with app.app_context():
+            db.session.add(test_item)
+            db.session.commit()
         response = self.app.get('/menu', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.mimetype, 'application/json')
         body = json.loads(response.data)
-        self.assertTrue('today_special' in body)
+        self.assertIn('today_special', body)
         self.assertEqual(body['today_special'], test_name)
 
 if __name__ == "__main__":
