@@ -45,8 +45,8 @@ jobs:
   # Build and push the Docker image
   push_to_registry:
     name: Build and push Docker image to Docker Hub
-    # ...but only when a `release` is `published`
-    if: github.event_name == 'release' # && github.event.action == 'published'
+    # Run on release OR when pushing to dev branch
+    if: github.event_name == 'release' || (github.event_name == 'push' && github.ref == 'refs/heads/dev')
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -65,5 +65,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_REPOSITORY }}:latest
+            ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ github.ref == 'refs/heads/dev' && 'dev' || 'latest' }}
             ${{ secrets.DOCKERHUB_REPOSITORY }}:${{ github.sha }}
