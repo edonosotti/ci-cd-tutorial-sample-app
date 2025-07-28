@@ -1,0 +1,57 @@
+name: Deploy Flask App to VM
+
+on:
+  push:
+    branches:
+      - main  # orr your default branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies (for lint/test, optional)
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Copy files to VM
+        uses: appleboy/scp-action@v0.1.5
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          port: 22
+          source: "."
+          target: "/home/${{ secrets.VM_USER }}/ci-cd-tutorial-sample-app"
+
+      - name: Run deploy commands on VM
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          port: 22
+          script: |
+            cd ~/ci-cd-tutorial-sample-app
+            # Activate virtual environment or create if missing
+            if [ ! -d "venv" ]; then
+              python3 -m venv venv
+            fi
+            source venv/bin/activate
+            pip install --upgrade pip
+            pip install -r requirements.txt
+
+            # Restart Gunicorn (adjust service name or command as needed)
+            pkill gunicorn || true
+            nohup gunicorn --bind 0.0.0.0:8000 app:app > gunicorn.log 2>&1 &

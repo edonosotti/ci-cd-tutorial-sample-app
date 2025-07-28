@@ -1,0 +1,49 @@
+name: 'Build and Deploy to Cloud Run'
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  PROJECT_ID: 'thermal-hour-467308-u4'
+  GAR_NAME: 'gh-demo'
+  REGION: 'us-central1'
+  SERVICE: 'gitactionnew'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+
+      - name: 'Authenticate to Google Cloud with SA Key'
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.ABC }}'
+
+      - name: 'Set up gcloud CLI'
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: 'Docker Auth'
+        run: gcloud auth configure-docker "${{ env.REGION }}-docker.pkg.dev"
+
+      - name: 'Build and Push Docker Image'
+        run: |
+          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_NAME }}/${{ env.SERVICE }}:${{ github.sha }}"
+          docker build -t "$IMAGE" .
+          docker push "$IMAGE"
+
+      - name: 'Deploy to Cloud Run'
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          image: "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_NAME }}/${{ env.SERVICE }}:${{ github.sha }}"
+
+      - name: Show Deployed URL
+        run: echo ${{ steps.deploy.outputs.url }}
