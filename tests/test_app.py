@@ -6,8 +6,7 @@ class MenuApiTestCase(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client()
         # Reset global state before each test
-        app.menu_items.clear()
-        app.next_id = 1
+      
 
     def test_health_check(self):
         res = self.client.get('/')
