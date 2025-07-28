@@ -3,7 +3,7 @@ name: Deploy Flask App to Cloud Run (Production)
 on:
   push:
     branches:
-      - production
+      - prod-branch
 
 jobs:
   deploy:
