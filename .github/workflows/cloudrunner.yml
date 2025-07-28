@@ -2,8 +2,9 @@ name: 'Build and Deploy to Cloud Run'
 
 on:
   push:
-    branches:
-      - main
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 env:
   PROJECT_ID: 'thermal-hour-467308-u4'
