@@ -10,6 +10,14 @@ menu_items = [
     {"id": 4, "name": "Pasta", "price": 1000, "quantity": 6},
     {"id": 5, "name": "Sandwich", "price": 650, "quantity": 8},
     {"id": 6, "name": "French Fries", "price": 400, "quantity": 15}]
+
+@app.route("/menu/<int:item_id>", methods=["GET"])
+def get_menu_item(item_id):
+    item = next((item for item in menu_items if item["id"] == item_id), None)
+    if item:
+        return jsonify(item)
+    return jsonify({"error": "Item not found"}), 404
+
 @app.route('/')
 def home():
 	return jsonify({ "status": "ok" })
