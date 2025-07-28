@@ -2,6 +2,7 @@ from flask import json, jsonify
 from app import app
 from app import db
 from app.models import Menu
+from flask import render_template_string
 
 menu_items = [
     {"id": 1, "name": "Pizza", "price": 1200, "quantity": 10},
@@ -10,6 +11,37 @@ menu_items = [
     {"id": 4, "name": "Pasta", "price": 1000, "quantity": 6},
     {"id": 5, "name": "Sandwich", "price": 650, "quantity": 8},
     {"id": 6, "name": "French Fries", "price": 400, "quantity": 15}]
+
+
+# @app.route('/')
+# def home():
+# 	return jsonify({ "status": "ok" })
+
+@app.route('/')
+def home():
+    html = """
+    <html>
+        <head>
+            <title>Flask Sample App - API Guide</title>
+        </head>
+        <body>
+            <h1>Welcome to the Flask Sample App</h1>
+            <p>This app manages a sample menu. Below are the available API endpoints:</p>
+            <ul>
+                <li><code>GET /menu</code> – List all menu items</li>
+                <li><code>GET /menu/&lt;item_id&gt;</code> – Get a menu item by ID</li>
+                <li><code>GET /menu/names</code> – Get all menu item names</li>
+                <li><code>GET /menu/stock/total</code> – Get total quantity in stock</li>
+                <li><code>GET /menu/summary</code> – Get summary: IDs, names, quantities</li>
+                <li><code>GET /menu/available/&lt;min_qty&gt;</code> – Filter items by minimum quantity</li>
+                <li><code>GET /menu/sorted/price</code> – List items sorted by price</li>
+                <li><code>GET /menu/under/&lt;max_price&gt;</code> – List items priced below a value</li>
+            </ul>
+            <p>Example: <a href="/menu">/menu</a></p>
+        </body>
+    </html>
+    """
+    return render_template_string(html)
 
 @app.route("/menu/<int:item_id>", methods=["GET"])
 def get_menu_item(item_id):
@@ -28,9 +60,7 @@ def get_total_stock():
     total = sum(item["quantity"] for item in menu_items)
     return jsonify({"total_quantity": total})
 
-@app.route('/')
-def home():
-	return jsonify({ "status": "ok" })
+
 
 @app.route("/menu", methods=["GET"])
 def get_menu():
