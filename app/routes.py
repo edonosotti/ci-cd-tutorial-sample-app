@@ -10,7 +10,8 @@ menu_items = [
     {"id": 3, "name": "Fried Rice", "price": 800, "quantity": 7},
     {"id": 4, "name": "Pasta", "price": 1000, "quantity": 6},
     {"id": 5, "name": "Sandwich", "price": 650, "quantity": 8},
-    {"id": 6, "name": "French Fries", "price": 400, "quantity": 15}]
+    {"id": 6, "name": "French Fries", "price": 400, "quantity": 15},
+    {"id": 7, "name": "Rice and Curry", "price": 400, "quantity": 15}]
 
 
 # @app.route('/')
