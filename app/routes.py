@@ -23,6 +23,11 @@ def get_menu_names():
     names = [item["name"] for item in menu_items]
     return jsonify({"names": names})
 
+@app.route("/menu/stock/total", methods=["GET"])
+def get_total_stock():
+    total = sum(item["quantity"] for item in menu_items)
+    return jsonify({"total_quantity": total})
+
 @app.route('/')
 def home():
 	return jsonify({ "status": "ok" })
