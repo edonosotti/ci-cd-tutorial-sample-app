@@ -28,4 +28,4 @@ def menu_summary():
         "names": names,
         "ids": ids,
         "quantities": quantities
-    })
+        })
