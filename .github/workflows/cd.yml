@@ -6,7 +6,7 @@ on:
       - prod-branch
 
 jobs:
-  commit-and-test:
+  CI:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,7 +27,7 @@ jobs:
         run: |
           python -m unittest discover -s . -p "test_*.py"
 
-  deploy-to-production:
+  CD:
     name: Build & Deploy to Cloud Run
     runs-on: ubuntu-latest
 
