@@ -17,4 +17,4 @@ ENV LANG="C.UTF-8"
 
 EXPOSE 8000/tcp
 
-CMD ["/bin/sh", "-c", "flask db upgrade && gunicorn app:app -b 0.0.0.0:8000"]
+CMD ["/bin/sh", "-c", "flask db upgrade && gunicorn app:app -b 0.0.0.0:8080"]
