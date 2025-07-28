@@ -3,7 +3,9 @@ name: Deploy Flask App to VM
 on:
   push:
     branches:
-      - main  # or your default branch
+      - main
+      - cd_workflow
+  workflow_dispatch:  # Allow manual triggering from GitHub UI
 
 jobs:
   deploy:
@@ -18,7 +20,7 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install dependencies (for lint/test, optional)
+      - name: Install dependencies (optional, for lint/test)
         run: |
           python -m venv venv
           source venv/bin/activate
@@ -44,14 +46,19 @@ jobs:
           port: 22
           script: |
             cd ~/ci-cd-tutorial-sample-app
-            # Activate virtual environment or create if missing
+            
+            # Create and activate virtual environment if missing
             if [ ! -d "venv" ]; then
               python3 -m venv venv
             fi
             source venv/bin/activate
+
+            # Upgrade pip and install dependencies
             pip install --upgrade pip
             pip install -r requirements.txt
 
-            # Restart Gunicorn (adjust service name or command as needed)
+            # Restart Gunicorn safely
             pkill gunicorn || true
+            
+            # Run Gunicorn in background, binding all interfaces on port 8000
             nohup gunicorn --bind 0.0.0.0:8000 app:app > gunicorn.log 2>&1 &
