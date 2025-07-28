@@ -1,0 +1,63 @@
+name: CD Pipeline
+on:
+  push:
+    branches:
+      - main
+      - new-branch
+  workflow_dispatch:  # Allow manual triggering from GitHub UI
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies (optional, for lint/test)
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Copy files to VM
+        uses: appleboy/scp-action@v0.1.5
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          port: 22
+          source: "."
+          target: "/home/${{ secrets.VM_USER }}/ci-cd-tutorial-sample-app"
+
+      - name: Run deploy commands on VM
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          port: 22
+          script: |
+            cd ~/ci-cd-tutorial-sample-app
+            
+            # Create and activate virtual environment if missing
+            if [ ! -d "venv" ]; then
+              python3 -m venv venv
+            fi
+            source venv/bin/activate
+
+            # Upgrade pip and install dependencies
+            pip install --upgrade pip
+            pip install -r requirements.txt
+
+            # Restart Gunicorn safely
+            pkill gunicorn || true
+            
+            # Run Gunicorn in background, binding all interfaces on port 8000
+            nohup gunicorn --bind 0.0.0.0:8000 app:app > gunicorn.log 2>&1 &
