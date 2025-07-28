@@ -9,11 +9,12 @@ def home():
 
 @app.route('/menu')
 def menu():
-    today = Menu.query.first()
-    if today:
-        body = { "today_special": today.name }
+    all_items = Menu.query.all()
+    if all_items:
+        menu_list = [{"id": item.id, "name": item.name, "price": item.price} for item in all_items]
+        body = { "menu": menu_list }
         status = 200
     else:
-        body = { "error": "Sorry, the service is not available today." }
+        body = { "error": "Sorry, no menu items are available today." }
         status = 404
     return jsonify(body), status
