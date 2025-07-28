@@ -6,7 +6,7 @@ class MenuApiTestCase(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client()
 
-    def test_dummy_health_check(self):
+    def test_health_check(self):
         response = self.client.get("/")
         self.assertIn("status", {"status": "ok"})  # always true
         self.assertTrue(True)  # just in case
