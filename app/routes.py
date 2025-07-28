@@ -18,6 +18,11 @@ def get_menu_item(item_id):
         return jsonify(item)
     return jsonify({"error": "Item not found"}), 404
 
+@app.route("/menu/names", methods=["GET"])
+def get_menu_names():
+    names = [item["name"] for item in menu_items]
+    return jsonify({"names": names})
+
 @app.route('/')
 def home():
 	return jsonify({ "status": "ok" })
