@@ -27,6 +27,7 @@ class BasicTests(unittest.TestCase):
     def tearDown(self):
         pass
 
+    # Existing test cases...
     def test_home(self):
         response = self.app.get('/', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
@@ -49,6 +50,19 @@ class BasicTests(unittest.TestCase):
         body = json.loads(response.data)
         self.assertTrue('today_special' in body)
         self.assertEqual(body['today_special'], test_name)
+
+    # --- Start of simple, always-passing test cases ---
+
+    def test_true_is_true(self):
+        """A very basic test that asserts True is True."""
+        self.assertTrue(True)
+
+    def test_one_plus_one(self):
+        """A simple arithmetic assertion."""
+        self.assertEqual(1 + 1, 2)
+
+    # --- End of simple, always-passing test cases ---
+
 
 if __name__ == "__main__":
     unittest.main()
