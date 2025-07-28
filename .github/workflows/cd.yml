@@ -3,7 +3,7 @@ name: Deploy Flask App to VM
 on:
   push:
     branches:
-      - main  # or your default branch
+      - main  # orr your default branch
 
 jobs:
   deploy:
