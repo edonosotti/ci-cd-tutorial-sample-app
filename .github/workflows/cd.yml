@@ -1,10 +1,9 @@
-name: Deploy Flask App to VM
-
+name: CD Pipeline
 on:
   push:
     branches:
       - main
-      - cd_workflow
+      - new_branch
   workflow_dispatch:  # Allow manual triggering from GitHub UI
 
 jobs:
