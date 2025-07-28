@@ -15,3 +15,15 @@ def home():
 @app.route("/menu", methods=["GET"])
 def get_menu():
     return jsonify({"menu": menu_items})
+
+@app.route("/menu/summary", methods=["GET"])
+def menu_summary():
+    names = [item["name"] for item in menu_items]
+    ids = [item["id"] for item in menu_items]
+    quantities = [item["quantity"] for item in menu_items]
+
+    return jsonify({
+        "names": names,
+        "ids": ids,
+        "quantities": quantities
+    })
