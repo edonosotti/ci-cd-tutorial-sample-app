@@ -1,0 +1,95 @@
+# .github/workflows/deploy-to-cloud-run.yml
+name: Deploy to Cloud Run
+
+on:
+  workflow_run:
+    # Trigger this workflow when the 'Python Flask CI' workflow completes
+    workflows: ["Python Flask CI"] # <--- IMPORTANT: This must match the 'name' of your CI workflow
+    types:
+      - completed # Only trigger when the referenced workflow finishes
+    # Optionally, restrict to specific branches the CI workflow ran on
+    branches:
+      - master # Adjust to 'main' if your primary branch is 'main'
+
+env: # Environment variables specific to your Cloud Run project and service
+  PROJECT_ID: 'thermal-hour-467308-u4'
+  GAR_NAME: 'gh-demo' # Your Google Artifact Registry repository name
+  REGION: 'us-central1'
+  SERVICE: 'gitactionnew' # Your Cloud Run service name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Only run this deployment job if the triggering CI workflow concluded successfully
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout code
+        # Checkout is needed for access to any local files (e.g., scripts, configuration)
+        # though the image itself is fetched from the registry.
+        uses: actions/checkout@v4
+
+      - name: 'Authenticate to Google Cloud with SA Key'
+        # Authenticates your GitHub Actions runner to Google Cloud using your service account key
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.ABC }}' # Your GCP Service Account Key secret
+
+      - name: 'Set up gcloud CLI'
+        # Ensures the gcloud CLI is available for the deploy-cloudrun action
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: 'Get Image Name from CI Workflow Output'
+        id: get_image_name # <--- ID to reference outputs from this step
+        uses: actions/github-script@v6
+        with:
+          script: |
+            # This script fetches the details of the workflow run that triggered this one.
+            const { owner, repo } = context.repo;
+            const run_id = ${{ github.event.workflow_run.id }};
+
+            // Get the list of jobs from the triggering workflow run
+            const jobs_response = await github.rest.actions.listJobsForWorkflowRun({
+              owner,
+              repo,
+              run_id: run_id
+            });
+
+            // Find the 'build-and-test' job and its steps
+            const build_test_job = jobs_response.data.jobs.find(job => job.name === 'build-and-test');
+            if (!build_test_job) {
+              core.setFailed('Could not find "build-and-test" job in the triggering workflow run.');
+              return;
+            }
+
+            // Get details of the 'build_push_image' step from the 'build-and-test' job
+            const steps_response = await github.rest.actions.listWorkflowRunAttemptSteps({
+                owner,
+                repo,
+                run_id: run_id,
+                attempt_number: build_test_job.run_attempt # Use the specific attempt number
+            });
+
+            const build_push_step = steps_response.data.steps.find(step => step.name === 'Build and Push Docker Image to Google Artifact Registry');
+            if (build_push_step && build_push_step.outputs && build_push_step.outputs.image_name) {
+              const image_name = build_push_step.outputs.image_name;
+              console.log(`Found image_name from CI: ${image_name}`);
+              core.setOutput('image_name', image_name); # Set the output for this step
+            } else {
+              core.setFailed('Could not find image_name output from the CI build step.');
+            }
+
+      - name: 'Deploy to Cloud Run'
+        id: deploy # <--- ID for the deployment step
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          # Use the image name obtained from the previous 'get_image_name' step
+          image: ${{ steps.get_image_name.outputs.image_name }}
+          # Optionally, uncomment and configure for public access directly in the workflow
+          # flags: --allow-unauthenticated
+
+      - name: Show Deployed URL
+        # Access the URL output from the deploy action
+        run: echo  ${{ steps.deploy.outputs.url }}
