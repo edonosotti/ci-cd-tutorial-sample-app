@@ -1,0 +1,29 @@
+name: CD - Deploy to Staging
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Deploy to staging
+        run: |
+          echo "Deploying to staging..."
+          # Replace this with your real deployment command
+          echo "Deployed at $(date)" > deployment-log.txt
