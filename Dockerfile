@@ -9,8 +9,13 @@ WORKDIR /sample-app
 
 COPY . /sample-app/
 
-RUN pip3 install -r requirements.txt && \
+# ... (previous lines of your Dockerfile)
+
+RUN pip3 install --no-cache-dir --upgrade pip && \  # Add this line
+    pip3 install -r requirements.txt && \
     pip3 install -r requirements-server.txt
+
+# ... (rest of your Dockerfile)
 
 ENV LC_ALL="C.UTF-8"
 ENV LANG="C.UTF-8"
