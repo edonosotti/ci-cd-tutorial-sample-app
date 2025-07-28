@@ -1,20 +1,40 @@
-FROM ubuntu:18.04
+# Use the official lightweight Python image.
+FROM python:3.11-slim
 
-RUN apt-get update && \
-    apt-get -y upgrade && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yq libpq-dev gcc python3.8 python3-pip && \
-    apt-get clean
+# Set environment variables for Python in Docker
+# Prevents Python from writing .pyc files
+ENV PYTHONDONTWRITEBYTECODE=1
+# Ensures Python output is sent immediately to the terminal
+ENV PYTHONUNBUFFERED=1
+# Add /app to PYTHONPATH so Python can find your 'app' package
+ENV PYTHONPATH=/app:$PYTHONPATH
 
-WORKDIR /sample-app
+# Set the working directory inside the container
+WORKDIR /app
 
-COPY . /sample-app/
+# Expose port 8080. Cloud Run typically expects services to listen on this port.
+EXPOSE 8080
 
-RUN pip3 install -r requirements.txt && \
-    pip3 install -r requirements-server.txt
+# Install dependencies
+# Copy requirements files first to leverage Docker's caching.
+COPY requirements.txt .
+COPY requirements-server.txt . 
 
-ENV LC_ALL="C.UTF-8"
-ENV LANG="C.UTF-8"
+# Install Python dependencies.
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install -r requirements.txt && \
+    pip install -r requirements-server.txt
 
-EXPOSE 8000/tcp
+# Copy the rest of your application code into the container
+COPY . .
 
-CMD ["/bin/sh", "-c", "flask db upgrade && gunicorn app:app -b 0.0.0.0:8000"]
+# Copy the entrypoint script and make it executable
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Use the entrypoint script.
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# The CMD provides default arguments to the ENTRYPOINT script.
+# Since Gunicorn is started by entrypoint.sh, this can be empty or used for further arguments.
+CMD []
