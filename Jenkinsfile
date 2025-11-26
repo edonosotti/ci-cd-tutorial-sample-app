@@ -1,4 +1,6 @@
 pipeline {
+  agent any
+
   environment {
     KUBECONFIG_PATH = '$JENKINS_HOME/config'
     ANSIBLE_HOST_KEY_CHECKING = 'False'
