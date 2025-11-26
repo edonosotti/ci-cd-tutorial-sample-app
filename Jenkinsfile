@@ -2,8 +2,7 @@ pipeline {
   agent any
 
   environment {
-    JENKINS_HOME = '/var/lib/jenkins'
-    KUBECONFIG_PATH = '$JENKINS_HOME/config'
+    KUBECONFIG_PATH = '/var/lib/jenkins/config'
     ANSIBLE_HOST_KEY_CHECKING = 'False'
     INVENTORY = 'ansible/inventory.ini'
     PLAYBOOK  = 'ansible/deploy.yml'
@@ -33,8 +32,7 @@ pipeline {
       when { branch 'master' }
       steps {
         sh '''
-          export KUBECONFIG="$KUBECONFIG_PATH"
-          kubectl get nodes
+          kubectl --kubeconfig="$KUBECONFIG_PATH" get nodes
         '''
       }
     }
