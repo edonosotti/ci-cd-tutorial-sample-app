@@ -1,0 +1,175 @@
+- name: Deploy CI/CD sample Flask app to Ubuntu
+  hosts: workers-stage
+  become: yes
+  vars:
+    app_user: ciapp
+    app_dir: /opt/ci-cd-tutorial-sample-app
+    # assumes playbook is inside repo/ansible; repo_src will point to repo root on control node
+    repo_src: "{{ playbook_dir }}/.."
+    venv_path: "{{ app_dir }}/venv"
+    flask_app_env: app
+    gunicorn_bind: "0.0.0.0:8000"
+    listen_port: 80
+  tasks:
+    - name: Ensure apt cache updated and upgrades applied
+      apt:
+        update_cache: yes
+        upgrade: dist
+        cache_valid_time: 3600
+
+    - name: Install required packages
+      apt:
+        name:
+          - python3
+          - python3-venv
+          - python3-pip
+          - git
+          - nginx
+          - rsync
+          - build-essential
+          - libpq-dev
+          - gcc
+          - ufw
+        state: present
+        update_cache: yes
+
+    - name: Ensure application system user exists
+      user:
+        name: "{{ app_user }}"
+        system: yes
+        create_home: no
+        shell: /usr/sbin/nologin
+
+    - name: Create application directory
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: '0755'
+
+    - name: Synchronize project files from control node to remote (excludes .git and venv)
+      synchronize:
+        src: "{{ repo_src }}/"
+        dest: "{{ app_dir }}/"
+        rsync_opts:
+          - "--exclude=.git"
+          - "--exclude=venv"
+          - "--exclude=.env"
+          - "--exclude=ansible/"
+        delete: yes
+
+    - name: Ensure virtualenv exists
+      stat:
+        path: "{{ venv_path }}/bin/activate"
+      register: venv_stat
+
+    - name: Create virtualenv
+      command: python3 -m venv "{{ venv_path }}"
+      when: not venv_stat.stat.exists
+
+    - name: Install Python requirements into virtualenv
+      ansible.builtin.pip:
+        requirements: "{{ app_dir }}/requirements.txt"
+        virtualenv: "{{ venv_path }}"
+        virtualenv_command: python3 -m venv
+        state: present
+      environment:
+        PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+    - name: Install Python server requirements into virtualenv
+      ansible.builtin.pip:
+        requirements: "{{ app_dir }}/requirements-server.txt"
+        virtualenv: "{{ venv_path }}"
+        virtualenv_command: python3 -m venv
+        state: present
+      environment:
+        PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+    - name: Ensure .env file exist
+      copy:
+        dest: "{{ app_dir }}/.env"
+        content: |
+          FLASK_APP={{ flask_app_env }}
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: '0640'
+      when: not lookup('file', '{{ app_dir }}/.env', errors='ignore')
+
+    - name: Run database migrations (flask db upgrade)
+      command: "{{ venv_path }}/bin/flask db upgrade"
+      args:
+        chdir: "{{ app_dir }}"
+      environment:
+        FLASK_APP: "{{ flask_app_env }}"
+      register: db_migrate
+      failed_when: db_migrate.rc not in [0,1]  # idempotent: some tools return 1 when no migrations
+
+    - name: Run seed script (if present)
+      command: "{{ venv_path }}/bin/python seed.py"
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Create systemd service for gunicorn
+      template:
+        src: app.service.j2
+        dest: /etc/systemd/system/app.service
+        owner: root
+        group: root
+        mode: '0644'
+      notify:
+        - daemon-reload
+        - restart gunicorn
+
+    - name: Create nginx site configuration
+      template:
+        src: appnginx.j2
+        dest: /etc/nginx/sites-available/app
+        owner: root
+        group: root
+        mode: '0644'
+      notify:
+        - reload nginx
+
+    - name: Enable nginx site
+      file:
+        src: /etc/nginx/sites-available/app
+        dest: /etc/nginx/sites-enabled/app
+        state: link
+      notify:
+        - reload nginx
+
+    - name: Remove default nginx site if present
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify:
+        - reload nginx
+
+    - name: Ensure UFW allows HTTP and SSH
+      ufw:
+        rule: allow
+        name: 'Nginx Full'
+
+    - name: Start and enable gunicorn service
+      systemd:
+        name: app.service
+        enabled: yes
+        state: started
+        daemon_reload: no
+
+  handlers:
+    - name: daemon-reload
+      systemd:
+        daemon_reload: yes
+
+    - name: restart gunicorn
+      systemd:
+        name: app.service
+        state: restarted
+        enabled: yes
+
+    - name: reload nginx
+      service:
+        name: nginx
+        state: reloaded

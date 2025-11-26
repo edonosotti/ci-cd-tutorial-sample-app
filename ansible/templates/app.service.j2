@@ -1,0 +1,16 @@
+[Unit]
+Description=ci-cd-tutorial-sample-app gunicorn
+After=network.target
+
+[Service]
+User={{ app_user }}
+Group={{ app_user }}
+WorkingDirectory={{ app_dir }}
+Environment="PATH={{ venv_path }}/bin"
+Environment="FLASK_APP={{ flask_app_env }}"
+ExecStart={{ venv_path }}/bin/gunicorn --workers 3 app:app -b {{ gunicorn_bind }}
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
