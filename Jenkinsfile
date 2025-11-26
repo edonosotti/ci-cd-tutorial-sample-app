@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    KUBECONFIG_PATH = '/var/lib/jenkins/config'
+    KUBECONFIG_PATH = '/var/lib/jenkins/.kube/config'
     ANSIBLE_HOST_KEY_CHECKING = 'False'
     INVENTORY = 'ansible/inventory.ini'
     PLAYBOOK  = 'ansible/deploy.yml'
