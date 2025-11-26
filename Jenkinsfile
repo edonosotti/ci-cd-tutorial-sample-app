@@ -22,7 +22,6 @@ pipeline {
     stage('Deploy to stage (PR only)') {
       when { changeRequest() }
       steps {
-        withCredentials([sshUserPrivateKey(credentialsId: 'ansible_ssh_key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
           sh '''
             echo "Placeholder for Ansible deployment to stage environment..."
           '''
