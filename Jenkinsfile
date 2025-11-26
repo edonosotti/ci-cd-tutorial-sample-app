@@ -12,8 +12,6 @@ pipeline {
     skipDefaultCheckout()
   }
 
-  triggers { }
-
   stages {
     stage('Checkout') {
       steps {
