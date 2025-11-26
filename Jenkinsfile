@@ -25,7 +25,6 @@ pipeline {
           sh '''
             echo "Placeholder for Ansible deployment to stage environment..."
           '''
-        }
       }
     }
 
