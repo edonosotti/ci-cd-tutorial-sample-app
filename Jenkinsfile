@@ -6,6 +6,7 @@ pipeline {
     ANSIBLE_HOST_KEY_CHECKING = 'False'
     INVENTORY = 'ansible/inventory.ini'
     PLAYBOOK  = 'ansible/deploy.yml'
+    ARTIFACT_VERSION = readFile('version').trim()
   }
 
   options {
@@ -25,6 +26,26 @@ pipeline {
           sh '''
             echo "Placeholder for Ansible deployment to stage environment..."
           '''
+      }
+    }
+
+    stage('Create Docker image') {
+      when { branch 'master' }
+      steps {
+          sh "docker build -t app:${ARTIFACT_VERSION} ."
+      }
+    }
+
+    stage('Push Docker image') {
+      when { branch 'master' }
+      steps {
+          script {
+              sh "docker tag app:${ARTIFACT_VERSION} viyd/cicd-app:app-${ARTIFACT_VERSION}"
+              withCredentials([string(credentialsId: 'DOCKERHUB', variable: 'DOCKERHUB')]) {
+                  sh "echo $DOCKERHUB | docker login -u viyd --password-stdin"
+                  sh "docker push viyd/cicd-app:app-${ARTIFACT_VERSION}"
+              }
+          }
       }
     }
 
