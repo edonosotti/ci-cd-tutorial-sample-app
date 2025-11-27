@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    KUBECONFIG_PATH = 'var/lib/jenkins/.kube/config'
+    KUBECONFIG_PATH = '/var/lib/jenkins/.kube/config'
     ANSIBLE_HOST_KEY_CHECKING = 'False'
     INVENTORY = 'ansible/inventory.ini'
     PLAYBOOK  = 'ansible/deploy.yml'
@@ -43,6 +43,7 @@ pipeline {
         }
       }
     }
+
 
 
     stage('Test connectivity to k8s cluster') {
