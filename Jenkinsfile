@@ -27,17 +27,23 @@ pipeline {
     }
 
     stage('Push Docker image') {
-      when { branch 'master' }  
+      when { branch 'master' }
       steps {
-          script {
-              sh "docker tag app:${ARTIFACT_VERSION} viyd/cicd-app:app-${ARTIFACT_VERSION}"
-              withCredentials([usernamePassword(credentialsId: 'DOCKERHUB', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) { {
-                  sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
-                  sh "docker push viyd/cicd-app:app-${ARTIFACT_VERSION}"
-              }
+        script {
+          sh "docker tag app:${ARTIFACT_VERSION} viyd/cicd-app:app-${ARTIFACT_VERSION}"
+    
+          withCredentials([usernamePassword(
+              credentialsId: 'DOCKERHUB',
+              usernameVariable: 'USERNAME',
+              passwordVariable: 'PASSWORD'
+          )]) {
+            sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+            sh "docker push viyd/cicd-app:app-${ARTIFACT_VERSION}"
           }
+        }
       }
     }
+
 
     stage('Test connectivity to k8s cluster') {
       when { branch 'master' }
