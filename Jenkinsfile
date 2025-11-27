@@ -9,17 +9,7 @@ pipeline {
     ARTIFACT_VERSION = readFile('version').trim()
   }
 
-  options {
-    skipDefaultCheckout()
-  }
-
   stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
-    }
-
     stage('Deploy to stage (PR only)') {
       when { changeRequest() }
       steps {
@@ -30,6 +20,7 @@ pipeline {
     }
 
     stage('Create Docker image') {
+
       when { branch 'master' }
       steps {
           sh "docker build -t app:${ARTIFACT_VERSION} ."
