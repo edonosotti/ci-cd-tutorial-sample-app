@@ -20,7 +20,6 @@ pipeline {
     }
 
     stage('Create Docker image') {
-
       when { branch 'master' }
       steps {
           sh "docker build -t app:${ARTIFACT_VERSION} ."
@@ -28,12 +27,12 @@ pipeline {
     }
 
     stage('Push Docker image') {
-      when { branch 'master' }
+      when { branch 'master' }  
       steps {
           script {
               sh "docker tag app:${ARTIFACT_VERSION} viyd/cicd-app:app-${ARTIFACT_VERSION}"
-              withCredentials([string(credentialsId: 'DOCKERHUB', variable: 'DOCKERHUB')]) {
-                  sh "echo $DOCKERHUB | docker login -u viyd --password-stdin"
+              withCredentials([usernamePassword(credentialsId: 'DOCKERHUB', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) { {
+                  sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
                   sh "docker push viyd/cicd-app:app-${ARTIFACT_VERSION}"
               }
           }
