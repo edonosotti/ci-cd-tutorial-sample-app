@@ -22,7 +22,7 @@ pipeline {
     stage('Create Docker image') {
       when { branch 'master' }
       steps {
-          sh "docker build -t app:${ARTIFACT_VERSION} ."
+          sh "docker build -t cicd-app:${ARTIFACT_VERSION} ."
       }
     }
 
@@ -30,7 +30,7 @@ pipeline {
       when { branch 'master' }
       steps {
         script {
-          sh "docker tag app:${ARTIFACT_VERSION} viyd/cicd-app:app-${ARTIFACT_VERSION}"
+          sh "docker tag cicd-app:${ARTIFACT_VERSION} viyd/cicd-app:${ARTIFACT_VERSION}"
     
           withCredentials([usernamePassword(
               credentialsId: 'DOCKERHUB',
