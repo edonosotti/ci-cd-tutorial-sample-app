@@ -23,12 +23,12 @@ pipeline {
       }
     }
 
-    stage('Create Docker image') {
-      when { branch 'master' }
-      steps {
-          sh "docker build -t cicd-app:${ARTIFACT_VERSION} ."
-      }
-    }
+    // stage('Create Docker image') {
+    //   when { branch 'master' }
+    //   steps {
+    //       sh "docker build -t cicd-app:${ARTIFACT_VERSION} ."
+    //   }
+    // }
 
     stage('Push Docker image to Docker Hub') {
       when { branch 'master' }
@@ -41,8 +41,7 @@ pipeline {
               usernameVariable: 'USERNAME',
               passwordVariable: 'PASSWORD'
           )]) {
-            sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
-            sh "docker push viyd/cicd-app:${ARTIFACT_VERSION}"
+            sh "make push-latest"
           }
         }
       }
