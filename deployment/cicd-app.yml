@@ -14,9 +14,11 @@ spec:
       labels:
         app: cicd-app
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: cicd-app
-          image: viyd/cicd-app:latest
+          image: docker.io/viyd/cicd-app:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
