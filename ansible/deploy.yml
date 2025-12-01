@@ -1,10 +1,9 @@
-- name: Deploy CI/CD sample Flask app to Ubuntu
-  hosts: workers-stage
+- name: Deploy CI/CD Flask app to Ubuntu
+  hosts: stage
   become: yes
   vars:
     app_user: ciapp
     app_dir: /opt/ci-cd-tutorial-sample-app
-    # assumes playbook is inside repo/ansible; repo_src will point to repo root on control node
     repo_src: "{{ playbook_dir }}/.."
     venv_path: "{{ app_dir }}/venv"
     flask_app_env: app
