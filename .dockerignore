@@ -1,0 +1,13 @@
+.git
+__pycache__
+*.pyc
+node_modules
+.env
+dist
+build
+.vscode
+.vagrant
+Vagrantfile
+.DS_Store
+Makefile
+Jenkinsfile
