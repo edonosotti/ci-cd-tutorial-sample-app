@@ -56,6 +56,8 @@ pipeline {
           sh "kubectl --kubeconfig=$KCFG rollout restart deployment cicd-app"
         }
       }
+    }
+  }
 
   post {
     success {
