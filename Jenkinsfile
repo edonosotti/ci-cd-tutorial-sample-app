@@ -31,7 +31,7 @@ pipeline {
       }
     }
 
-    stage('Push Docker image') {
+    stage('Push Docker image to Docker Hub') {
       when { branch 'master' }
       steps {
         script {
@@ -45,6 +45,16 @@ pipeline {
             sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
             sh "docker push viyd/cicd-app:app-${ARTIFACT_VERSION}"
           }
+        }
+      }
+    }
+
+    stage('Push Docker image to local registry') {
+      when { branch 'master' }
+      steps {
+        script {
+          sh "docker tag cicd-app:${ARTIFACT_VERSION} localhost:5000/cicd-app:${ARTIFACT_VERSION}"
+          sh "docker push localhost:5000/cicd-app:${ARTIFACT_VERSION}"
         }
       }
     }
