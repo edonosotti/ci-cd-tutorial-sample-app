@@ -63,8 +63,8 @@ pipeline {
       when { branch 'master' }
       steps {
         sh '''
-          kubectl set image deployment/cicd-app cicd-app=localhost:5000/cicd-app:${ARTIFACT_VERSION} --record
-          kubectl rollout status deployment/cicd-app
+          kubectl set image deployment/cicd-app cicd-app=localhost:5000/cicd-app:${ARTIFACT_VERSION} --record --kubeconfig="$KUBECONFIG_PATH"
+          kubectl rollout status deployment/cicd-app --kubeconfig="$KUBECONFIG_PATH"
         '''
       }
     }
