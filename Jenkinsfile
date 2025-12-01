@@ -42,7 +42,7 @@ pipeline {
               passwordVariable: 'PASSWORD'
           )]) {
             sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
-            sh "docker push viyd/cicd-app:-${ARTIFACT_VERSION}"
+            sh "docker push viyd/cicd-app:${ARTIFACT_VERSION}"
           }
         }
       }
