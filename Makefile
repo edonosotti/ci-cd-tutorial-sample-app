@@ -4,7 +4,7 @@
 #   make push-latest         # tag built image as :latest and push
 #   make pull-latest         # pull image:latest from Docker Hub
 
-DOCKERHUB_USER ?= viyd
+DOCKERHUB_USER ?= localhost:5000
 IMAGE ?= $(DOCKERHUB_USER)/cicd-app
 TAG ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo latest)
 FULL_IMAGE := $(IMAGE):$(TAG)
