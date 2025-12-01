@@ -57,3 +57,14 @@ pull-latest:
 
 delete-test-images:
 	-docker rmi -f $(IMAGE):test || true
+
+deploy-stage:
+	ansible-playbook -i ansible/inventory/ ansible/deploy.yml
+
+manual-deploy-prod:
+	kubectl set image deployment/cicd-app cicd-app=$(FULL_IMAGE) --record
+	kubectl rollout status deployment/cicd-app
+
+manual-rollback-prod:
+	kubectl rollout undo deployment/cicd-app
+	kubectl rollout status deployment/cicd-app

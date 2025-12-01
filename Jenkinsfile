@@ -14,7 +14,7 @@ pipeline {
       when { changeRequest() }
       steps {
           sh '''
-            echo "Placeholder for Ansible deployment to stage environment..."
+            make deploy-stage
           '''
       }
     }
@@ -44,18 +44,16 @@ pipeline {
       }
     }
 
-
-
-    stage('Test connectivity to k8s cluster') {
-      when { branch 'master' }
-      steps {
-        sh '''
-          kubectl --kubeconfig="$KUBECONFIG_PATH" get nodes
-        '''
-      }
-    }
-
-  }
+  //   stage('Deploy to production') {
+  //     when { branch 'master' }
+  //     steps {
+  //       sh '''
+  //         kubectl set image deployment/cicd-app cicd-app=viyd/cicd-app:${ARTIFACT_VERSION} --record
+  //         kubectl rollout status deployment/cicd-app          
+  //       '''
+  //     }
+  //   }
+  // }
 
   post {
     success {
