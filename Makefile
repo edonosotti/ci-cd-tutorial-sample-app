@@ -61,10 +61,10 @@ delete-test-images:
 deploy-stage:
 	ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
 
-manual-deploy-prod:
-	kubectl set image deployment/cicd-app cicd-app=$(FULL_IMAGE)
+deploy-prod:
+	kubectl rollout restart deployment/cicd-app
 	kubectl rollout status deployment/cicd-app
 
-manual-rollback-prod:
-	kubectl rollout undo deployment/cicd-app
+deploy-specific-prod:
+	kubectl set image deployment/cicd-app cicd-app=$(FULL_IMAGE)
 	kubectl rollout status deployment/cicd-app
