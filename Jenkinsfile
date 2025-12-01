@@ -11,7 +11,7 @@ pipeline {
 
   stages {
     stage('Deploy to stage (PR only)') {
-      when { changeRequest() }
+      when { changeRequest() or branch 'master' }
       steps {
           sh '''
             make deploy-stage
@@ -44,16 +44,16 @@ pipeline {
       }
     }
 
-  //   stage('Deploy to production') {
-  //     when { branch 'master' }
-  //     steps {
-  //       sh '''
-  //         kubectl set image deployment/cicd-app cicd-app=viyd/cicd-app:${ARTIFACT_VERSION} --record
-  //         kubectl rollout status deployment/cicd-app          
-  //       '''
-  //     }
-  //   }
-  // }
+    // stage('Deploy to production') {
+    //   when { branch 'master' }
+    //   steps {
+    //     sh '''
+    //       kubectl set image deployment/cicd-app cicd-app=viyd/cicd-app:${ARTIFACT_VERSION} --record
+    //       kubectl rollout status deployment/cicd-app          
+    //     '''
+    //   }
+    // }
+  }
 
   post {
     success {
