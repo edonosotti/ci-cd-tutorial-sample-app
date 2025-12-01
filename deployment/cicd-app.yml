@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: cicd-app
-          image: localhost:5000/cicd-app:latest
+          image: viyd/cicd-app:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8000

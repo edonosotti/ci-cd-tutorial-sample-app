@@ -31,30 +31,20 @@ pipeline {
       }
     }
 
-    // stage('Push Docker image to Docker Hub') {
-    //   when { branch 'master' }
-    //   steps {
-    //     script {
-    //       sh "docker tag cicd-app:${ARTIFACT_VERSION} viyd/cicd-app:${ARTIFACT_VERSION}"
-    
-    //       withCredentials([usernamePassword(
-    //           credentialsId: 'DOCKERHUB',
-    //           usernameVariable: 'USERNAME',
-    //           passwordVariable: 'PASSWORD'
-    //       )]) {
-    //         sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
-    //         sh "docker push viyd/cicd-app:app-${ARTIFACT_VERSION}"
-    //       }
-    //     }
-    //   }
-    // }
-
-    stage('Push Docker image to local registry') {
+    stage('Push Docker image to Docker Hub') {
       when { branch 'master' }
       steps {
         script {
-          sh "docker tag cicd-app:${ARTIFACT_VERSION} localhost:5000/cicd-app:${ARTIFACT_VERSION}"
-          sh "docker push localhost:5000/cicd-app:${ARTIFACT_VERSION}"
+          sh "docker tag cicd-app:${ARTIFACT_VERSION} viyd/cicd-app:${ARTIFACT_VERSION}"
+    
+          withCredentials([usernamePassword(
+              credentialsId: 'DOCKERHUB',
+              usernameVariable: 'USERNAME',
+              passwordVariable: 'PASSWORD'
+          )]) {
+            sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+            sh "docker push viyd/cicd-app:app-${ARTIFACT_VERSION}"
+          }
         }
       }
     }
@@ -62,13 +52,10 @@ pipeline {
     stage('Deploy to production') {
       when { branch 'master' }
       steps {
-        sh '''
-          kubectl --kubeconfig="$KUBECONFIG_PATH" set image deployment/cicd-app cicd-app=localhost:5000/cicd-app:${ARTIFACT_VERSION} --record
-          kubectl  --kubeconfig="$KUBECONFIG_PATH" rollout status deployment/cicd-app
-        '''
+        withCredentials([file(credentialsId: 'jenkins-kubeconfig', variable: 'KCFG')]) {
+          sh "kubectl --kubeconfig=$KCFG rollout restart deployment cicd-app"
+        }
       }
-    }
-  }
 
   post {
     success {

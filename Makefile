@@ -4,7 +4,7 @@
 #   make push-latest         # tag built image as :latest and push
 #   make pull-latest         # pull image:latest from Docker Hub
 
-DOCKERHUB_USER ?= localhost:5000
+DOCKERHUB_USER ?= viyd
 IMAGE ?= $(DOCKERHUB_USER)/cicd-app
 TAG ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo latest)
 FULL_IMAGE := $(IMAGE):$(TAG)
@@ -62,7 +62,7 @@ deploy-stage:
 	ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
 
 manual-deploy-prod:
-	kubectl set image deployment/cicd-app cicd-app=$(FULL_IMAGE) --record
+	kubectl set image deployment/cicd-app cicd-app=$(FULL_IMAGE)
 	kubectl rollout status deployment/cicd-app
 
 manual-rollback-prod:
