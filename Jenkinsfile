@@ -11,7 +11,12 @@ pipeline {
 
   stages {
     stage('Deploy to stage (PR only)') {
-      when { changeRequest() or branch 'master' }
+      when {
+        anyOf {
+          changeRequest();
+          branch 'master';
+        }
+      }
       steps {
           sh '''
             make deploy-stage
