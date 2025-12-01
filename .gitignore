@@ -118,3 +118,6 @@ dmypy.json
 
 # Vagrant
 .vagrant/
+
+config
+jenkins-kubeconfig
