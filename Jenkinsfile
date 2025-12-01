@@ -2,7 +2,6 @@ pipeline {
   agent any
 
   environment {
-    KUBECONFIG_PATH = '/var/lib/jenkins/.kube/config'
     ANSIBLE_HOST_KEY_CHECKING = 'False'
     INVENTORY = 'ansible/inventory.ini'
     PLAYBOOK  = 'ansible/deploy.yml'
@@ -43,7 +42,7 @@ pipeline {
               passwordVariable: 'PASSWORD'
           )]) {
             sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
-            sh "docker push viyd/cicd-app:app-${ARTIFACT_VERSION}"
+            sh "docker push viyd/cicd-app:-${ARTIFACT_VERSION}"
           }
         }
       }
