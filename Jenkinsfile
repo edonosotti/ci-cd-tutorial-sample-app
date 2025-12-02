@@ -14,7 +14,7 @@ pipeline {
       steps {
         script {
           sh '''
-            python3 -m unittest discover tests || true
+            python3 -m unittest discover tests
           '''
         }
       }
