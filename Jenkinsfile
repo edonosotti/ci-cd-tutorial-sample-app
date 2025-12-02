@@ -80,7 +80,7 @@ pipeline {
               usernameVariable: 'USERNAME',
               passwordVariable: 'PASSWORD'
           )]) {
-            sh "make push-latest"
+            sh "TAG=${ARTIFACT_VERSION} make push-latest"
           }
         }
       }
