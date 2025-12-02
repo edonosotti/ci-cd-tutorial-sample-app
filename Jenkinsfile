@@ -9,6 +9,41 @@ pipeline {
   }
 
   stages {
+    stage('Tests') {
+      when { changeRequest() }
+      steps {
+        script {
+          sh '''
+            python3 -m unittest discover tests || true
+          '''
+        }
+      }
+    }
+
+    stage('SonarQube Analysis') {
+      when { changeRequest() }
+      steps {
+        script {
+          withSonarQubeEnv('mySonarQube') {
+            sh '''
+              sonar-scanner \
+                -Dsonar.projectKey=cicd-app \
+                -Dsonar.sources=. \
+            '''
+          }
+        }
+      }
+    }
+
+    stage('SonarQube Quality Gate') {
+      when { changeRequest() }
+      steps {
+        timeout(time: 10, unit: 'MINUTES') {
+          waitForQualityGate abortPipeline: true
+        }
+      }
+    }
+
     stage('Deploy to stage (PR only)') {
       when {
         anyOf {
