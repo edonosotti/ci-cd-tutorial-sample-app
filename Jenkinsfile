@@ -17,7 +17,9 @@ pipeline {
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
-            python3 -m unittest discover tests
+            pip install coverage  
+            coverage run -m unittest discover tests
+            coverage xml -o coverage.xml
             deactivate
           '''
         }
@@ -33,6 +35,7 @@ pipeline {
               sonar-scanner \
                 -Dsonar.projectKey=cicd-app \
                 -Dsonar.sources=. \
+                -Dsonar.python.coverage.reportPaths=coverage.xml \
             '''
           }
         }
