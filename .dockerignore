@@ -11,3 +11,4 @@ Vagrantfile
 .DS_Store
 Makefile
 Jenkinsfile
+ansible
