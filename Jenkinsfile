@@ -14,6 +14,7 @@ pipeline {
       steps {
         script {
           sh '''
+            pip install -r requirements.txt
             python3 -m unittest discover tests || true
           '''
         }
